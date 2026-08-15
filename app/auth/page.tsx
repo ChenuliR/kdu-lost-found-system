@@ -1,16 +1,17 @@
-import UserComponent from "@/components/UserCard";
 import { createSupabaseServerClient } from "@/lib/supabase/server-client";
 import { redirect } from "next/navigation";
+import AuthComponent from "../../components/AuthCard";
 
-export default async function Home() {
+export default async function AuthPage() {
   const supabase = await createSupabaseServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect("/auth");
+  console.log({ user });
+  if (user) {
+    redirect("/");
   }
 
-  return <UserComponent user={user} />;
+  return <AuthComponent />;
 }
