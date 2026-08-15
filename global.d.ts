@@ -1,3 +1,3 @@
 type AuthMode = "signUp" | "signIn";
 
-type SupabaseSchema = Record<string, never>
+type SupabaseSchema = Record<string, never>;

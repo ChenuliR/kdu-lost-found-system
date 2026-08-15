@@ -12,54 +12,70 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser-client";
-import { User } from "@supabase/supabase-js";
-import { LockKeyhole } from "lucide-react";
+import { Eye, EyeOff, Loader, LockKeyhole } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { toast } from "../../components/ui/toast";
+import { toast } from "./ui/toast";
 
-type AuthProps = {
-  user: User | null;
-};
-
-export default function AuthComponent({ user }: AuthProps) {
+export default function AuthComponent() {
   const [authMode, setAuthMode] = useState<AuthMode>("signIn");
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const supabase = getSupabaseBrowserClient();
+
+  const router = useRouter();
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
 
     if (authMode === "signIn") {
       const { error, data } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
-      
+
       if (error) {
         console.log(error.message);
+        toast.add({
+          type: "error",
+          description: error.message,
+        });
       } else {
         toast.add({
           type: "success",
           description: "Signed in successfully.",
         });
+        router.push("/");
       }
       console.log({ data });
     } else {
-      const { error, data } = await supabase.auth.signUp({ email, password, options: {
-        emailRedirectTo: `${window.location.origin}`
-      } });
-      
-            if (error) {
-              console.log(error.message);
-            } else {
-              toast.add({
-                type: "info",
-                description: "Check your inbox to confirm the new account",
-              });
-            }
-            console.log({ data });
+      const { error, data } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}`,
+        },
+      });
+
+      if (error) {
+        console.log(error.message);
+        toast.add({
+          type: "error",
+          description: error.message,
+        });
+      } else {
+        toast.add({
+          type: "info",
+          description: "Check your inbox to confirm the new account",
+        });
+      }
+      console.log({ data });
     }
+    setIsLoading(false)
+    setPassword("")
   };
 
   return (
@@ -99,26 +115,52 @@ export default function AuthComponent({ user }: AuthProps) {
                   <Label htmlFor="password">Password</Label>
                   <a
                     href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                    className="ml-auto inline-block text-xs underline-offset-4 hover:underline text-muted-foreground"
                   >
                     Forgot your password?
                   </a>
                 </div>
-                <Input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  min={6}
-                  required
-                />
+                <div className="relative">
+                  <Input
+                    id="password"
+                    type={showPassword? "text" : "password"}
+                    placeholder="Enter password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent cursor-pointer"
+                  >
+                    {showPassword ? (
+                      <Eye className="h-4 w-4 text-muted-foreground" />
+                    ) : (
+                      <EyeOff className="h-4 w-4 text-muted-foreground" />
+                    )}
+                  </Button>
+                </div>
               </div>
             </div>
           </form>
         </CardContent>
         <CardFooter className="flex-col gap-2">
-          <Button form="auth-form" type="submit" className="w-full">
-            {authMode === "signIn" ? "Login" : "Create Account"}
+          <Button
+            form="auth-form"
+            type="submit"
+            disabled={isLoading}
+            className="w-full"
+          >
+            {isLoading ? (
+              <Loader className="animate-spin" />
+            ) : authMode === "signIn" ? (
+              "Login"
+            ) : (
+              "Create Account"
+            )}
           </Button>
           <div className="flex justify-center items-center">
             <span>
@@ -128,6 +170,7 @@ export default function AuthComponent({ user }: AuthProps) {
             </span>
             <Button
               variant="link"
+              className="underline cursor-pointer"
               onClick={() =>
                 setAuthMode(authMode === "signIn" ? "signUp" : "signIn")
               }
