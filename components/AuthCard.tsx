@@ -27,6 +27,12 @@ export default function AuthComponent() {
 
   const router = useRouter();
 
+  const validateSignUp = (email: string, password: string): string | null => {
+    if (!email.endsWith("@kdu.ac.lk")) return "Invalid email";
+    if (password.length < 8) return "Password must be at least 8 characters";
+    return null;
+  };
+
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
@@ -46,12 +52,23 @@ export default function AuthComponent() {
       } else {
         toast.add({
           type: "success",
-          description: "Signed in successfully.",
+          description: "Signed in successfully",
         });
         router.push("/");
       }
       console.log({ data });
     } else {
+      const validationError = validateSignUp(email, password);
+      if (validationError) {
+        toast.add({
+          type: "error",
+          description: validationError,
+        });
+        setIsLoading(false);
+        setPassword("");
+        return;
+      }
+
       const { error, data } = await supabase.auth.signUp({
         email,
         password,
@@ -68,14 +85,16 @@ export default function AuthComponent() {
         });
       } else {
         toast.add({
-          type: "info",
-          description: "Check your inbox to confirm the new account",
+          type: "success",
+          description: "Created account successfully",
         });
+        await supabase.auth.signOut();
+        setAuthMode("signIn");
       }
       console.log({ data });
     }
-    setIsLoading(false)
-    setPassword("")
+    setIsLoading(false);
+    setPassword("");
   };
 
   return (
@@ -123,7 +142,7 @@ export default function AuthComponent() {
                 <div className="relative">
                   <Input
                     id="password"
-                    type={showPassword? "text" : "password"}
+                    type={showPassword ? "text" : "password"}
                     placeholder="Enter password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
