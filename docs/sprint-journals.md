@@ -70,7 +70,7 @@ The remaining stories have not yet been completed and will require further devel
 #### 5. UI/UX Design Finalization
 Figma Design: UI/UX Designer created high-fidelity mockups for all major screens.
 
-Client Approval: Product Owner presented designs to clients; feedback incorporated and design officially approved with some changes in the navigation bar.
+Client Approval: The Product Owner presented the designs to the clients, and their feedback was incorporated. The design was officially approved with minor changes to the navigation bar and a request to add a dark mode feature.
 
 Handoff: Assets exported and Figma link shared with Frontend Developer.
 
