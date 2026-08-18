@@ -57,18 +57,24 @@ Story 3: Create Lost Item Post
 Story 4: Create Found Item Post
 Story 5: Upload Item Photo
 Story 11: View Item Details
+
 Sprint Goal: "Enable users to register, report a lost/found item, and browse the feed."
 
 Remaining 11 stories placed in Product Backlog for future sprints.
+However, during the sprint, development progressed more slowly than initially planned. 
+By the current sprint review, User Login and User Logout have been successfully completed.
+The remaining stories have not yet been completed and will require further development.
 
 ---
 
 #### 5. UI/UX Design Finalization
 Figma Design: UI/UX Designer created high-fidelity mockups for all major screens.
 
-Client Approval: Product Owner presented designs to clients; feedback incorporated and design officially approved.
+Client Approval: Product Owner presented designs to clients; feedback incorporated and design officially approved with some changes in the navigation bar.
 
 Handoff: Assets exported and Figma link shared with Frontend Developer.
+
+The initial UI/UX designs were implemented based on the approved Figma designs.
 
 ---
 
@@ -76,6 +82,12 @@ Handoff: Assets exported and Figma link shared with Frontend Developer.
 Tech Stack: React (frontend) with routing and state management configured.
 
 First Screens: Sign-up and Login pages started, following pixel-perfect Figma designs.
+
+The following authentication features have been completed:
+User Login
+User Logout
+
+The remaining frontend screens and functionalities are still under development.
 
 ---
 
@@ -93,14 +105,15 @@ Outcome: 6 stories pulled into Sprint 1. Estimates assigned. Sprint Goal defined
 | :--- | :--- | :--- |
 | **August 6, 2026** | Tooling setup complete. GitHub board, labels, and milestones created. Sprint Planning conducted. | None. |
 | **August 10, 2026** | Figma designs approved by client. Frontend setup complete. Backend API for Sign-up in progress. | Frontend waiting on Backend API. |
+| **August 16, 2026** | User Login and Logout functionalities were completed. The client reviewed the implemented UI and requested changes to the navigation bar. | Navigation bar requires modifications based on client feedback. |
 
 ---
-### Sprint 1 Reflection (To be updated at Sprint End)
+### Sprint 1 Reflection 
 
 | Metric | Status |
 | :--- | :--- |
 | Stories Planned | 6 |
-| Stories Completed | *To be measured* |
-| Total Story Points | *To be measured* |
-| Velocity | *To be calculated* |
-| Lessons Learned | *To be documented* |
+| Stories Completed | 2 |
+| Total Story Points | 20 |
+| Velocity | 4 |
+
