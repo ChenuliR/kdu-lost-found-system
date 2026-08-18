@@ -12,7 +12,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser-client";
-import { Eye, EyeOff, Loader, LockKeyhole } from "lucide-react";
+import { Eye, EyeOff, Loader } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "./ui/toast";
@@ -101,9 +102,13 @@ export default function AuthComponent() {
     <div className="h-screen flex justify-center items-center">
       <Card className="w-full max-w-sm shadow-xl [--card-spacing:--spacing(8)]">
         <div className="w-full flex justify-center">
-          <span className="bg-primary rounded p-2">
-            <LockKeyhole color="#fff" />
-          </span>
+          <Image
+            src={"/logo.svg"}
+            alt="logo"
+            width={46}
+            height={40}
+            className="rounded-xs"
+          />
         </div>
         <CardHeader>
           <CardTitle className="text-2xl font-semibold text-center tracking-tight">
@@ -171,7 +176,7 @@ export default function AuthComponent() {
             form="auth-form"
             type="submit"
             disabled={isLoading}
-            className="w-full"
+            className="w-full cursor-pointer  "
           >
             {isLoading ? (
               <Loader className="animate-spin" />
