@@ -45,7 +45,6 @@ export default function AuthComponent() {
       });
 
       if (error) {
-        console.log(error.message);
         toast.add({
           type: "error",
           description: error.message,
@@ -57,7 +56,6 @@ export default function AuthComponent() {
         });
         router.push("/");
       }
-      console.log({ data });
     } else {
       const validationError = validateSignUp(email, password);
       if (validationError) {
@@ -79,7 +77,6 @@ export default function AuthComponent() {
       });
 
       if (error) {
-        console.log(error.message);
         toast.add({
           type: "error",
           description: error.message,
@@ -92,7 +89,6 @@ export default function AuthComponent() {
         await supabase.auth.signOut();
         setAuthMode("signIn");
       }
-      console.log({ data });
     }
     setIsLoading(false);
     setPassword("");
