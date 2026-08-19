@@ -51,7 +51,6 @@ export function NavUser({ user }: AuthUser) {
     const { error } = await supabase.auth.signOut();
 
     if (error) {
-      console.log(error.message);
       toast.add({
         type: "error",
         description: error.message,
