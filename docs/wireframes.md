@@ -11,18 +11,12 @@ The wireframes were designed using Figma and are used as a reference for the dev
 ### Wireframe Objectives
 
 The wireframes were created to:
-
-Define the structure and layout of each application screen.
-
-Identify the main components and content required on each screen.
-
-Establish the navigation flow between screens.
-
-Visualize the user journey through the application.
-
-Provide a common reference for all Scrum team members.
-
-Identify possible usability issues before development begins
+- Define the structure and layout of each application screen
+- Identify the main components and content required on each screen
+- Establish the navigation flow between screens
+- Visualize the user journey through the application
+- Provide a common reference for all Scrum team members
+- Identify possible usability issues before development begins
 
 <br>
 
@@ -72,18 +66,13 @@ The UI/UX design for the KDU Lost & Found System was created to provide a simple
 
 ### Design Features
 
- Clean and simple user interface
- 
- User-friendly and intuitive navigation
- 
- Easy browsing and searching of lost and found items
- 
- Clear organization of user posts and claims
- 
- Simple profile management
- 
- Dedicated admin interface for system management
- 
+-  Clean and simple user interface
+-  User-friendly and intuitive navigation
+-  Easy browsing and searching of lost and found items
+-  Clear organization of user posts and claims
+-  Simple profile management
+-  Dedicated admin interface for system management
+
 <br>
 
 ### Design Prototype
@@ -121,7 +110,62 @@ User Profile
 Profile Navigation
 <img width="1440" height="1145" alt="Profile Navigation" src="https://github.com/user-attachments/assets/d7ea9802-655f-46d3-86ce-b5827e0cc56c" />
 
-Admin Dashboard<img width="1440" height="1141" alt="Admin Dashboard" src="https://github.com/user-attachments/assets/0ec6b011-92ea-4610-bb8f-503a72837aeb" />
+Admin Dashboard
+<img width="1440" height="1141" alt="Admin Dashboard" src="https://github.com/user-attachments/assets/0ec6b011-92ea-4610-bb8f-503a72837aeb" />
+
+<br>
+<br>
+
+## Dark Mode UI Design
+
+## Overview
+
+This section presents the dark mode UI design of the system. The design was created based on the updated user requirement to provide users with an alternative dark theme.
+
+The dark mode design maintains the existing system structure and user flow while adapting the visual elements to provide a consistent, comfortable, and accessible dark-themed interface.
+
+## Design Considerations
+
+- Maintained the existing user interface structure and navigation.
+- Applied a consistent dark color scheme across the system.
+- Ensured sufficient contrast between text and backgrounds.
+- Adapted buttons, cards, forms, icons, and other UI components for dark mode.
+- Maintained consistency between light mode and dark mode.
+- Designed the interface to provide a comfortable viewing experience in low-light environments.
+
+## Dark Mode UI Design Screens
+
+Browse Listings
+<img width="1440" height="1142" alt="Browse Listing" src="https://github.com/user-attachments/assets/b5bd041d-1180-4140-9de5-83b70361a72a" />
+
+Item Details
+<img width="1440" height="1498" alt="Item Details" src="https://github.com/user-attachments/assets/7a5646a5-2652-4b82-99ca-84a43af81c63" />
+
+Create Lost Post
+<img width="1440" height="1247" alt="Lost Post" src="https://github.com/user-attachments/assets/5a22fee5-96df-4d12-bb1e-8be2c7c2bb8a" />
+
+Create Found Post
+<img width="1440" height="1531" alt="Found Post" src="https://github.com/user-attachments/assets/91afbc70-d8e9-440a-9f65-d24428264326" />
+
+My Posts
+<img width="1440" height="1370" alt="My Posts" src="https://github.com/user-attachments/assets/efad4e86-ce97-4677-9bd1-06039f3ea864" />
+
+My Claims
+<img width="1440" height="1258" alt="My Claims" src="https://github.com/user-attachments/assets/e5fafd0b-a794-4023-820c-faa1a8f73a51" />
+
+User Profile
+<img width="1440" height="1377" alt="User Profile" src="https://github.com/user-attachments/assets/a9f1c614-00d3-4113-8306-d8fb00022cea" />
+
+Profile Navigation
+<img width="1440" height="1259" alt="Profile Navigation" src="https://github.com/user-attachments/assets/e82a18aa-a8c8-41f6-a225-008aac7d23c4" />
+
+Admin Dashboard
+<img width="1440" height="1258" alt="Admin Dashboard" src="https://github.com/user-attachments/assets/f15a0904-8fe3-4bc1-a95d-3c2e8e167eb5" />
+
+
+
+
+
 
 
 
