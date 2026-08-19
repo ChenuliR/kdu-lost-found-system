@@ -32,7 +32,7 @@ export default async function AuthenticatedLayout({
         <AppSidebar user={user} />
         <main className="flex-1">
           <Navbar />
-          {children}
+          <section className="p-8">{children}</section>
         </main>
       </SidebarProvider>
     </div>
