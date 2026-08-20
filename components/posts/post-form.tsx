@@ -27,6 +27,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { AlertCircle, ImageUp, Info, Loader2, X } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
 const categories = [
@@ -106,6 +107,8 @@ export default function PostForm({ postType }: { postType: PostType }) {
     image: null,
   });
 
+  const router = useRouter()
+
   // Handle input changes
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -142,7 +145,7 @@ export default function PostForm({ postType }: { postType: PostType }) {
   const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dropover") {
+    if (e.type === "dragenter" || e.type === "dragover") {
       setDragActive(true);
     } else if (e.type === "dragleave") {
       setDragActive(false);
@@ -325,7 +328,7 @@ export default function PostForm({ postType }: { postType: PostType }) {
                   } ${isLoading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                 >
                   {photoPreview ? (
-                    <div className="flex flex-col items-center gap-4">
+                    <div className="flex flex-col items-center gap-4 pointer-events-auto">
                       <div className="relative">
                         <img
                           src={photoPreview}
@@ -401,8 +404,7 @@ export default function PostForm({ postType }: { postType: PostType }) {
               type="button"
               disabled={isLoading}
               className="cursor-pointer"
-              nativeButton={false}
-              render={<Link href={"/posts"} replace />}
+              onClick={() => router.replace("/posts/my-posts")}
             >
               Cancel
             </Button>
