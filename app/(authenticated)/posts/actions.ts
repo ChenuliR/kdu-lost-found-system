@@ -1,5 +1,6 @@
 "use server";
 
+import { getAuthUser } from "@/lib/auth/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server-client";
 import { redirect } from "next/navigation";
 
@@ -11,13 +12,7 @@ export async function createPost(
   postType: "lost" | "found",
 ) {
   const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/auth");
-  }
+  const user = await getAuthUser();
 
   const itemName = formData.get("itemName") as string;
   const category = formData.get("category") as string;
