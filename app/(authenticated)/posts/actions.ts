@@ -2,7 +2,6 @@
 
 import { getAuthUser } from "@/lib/auth/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server-client";
-import { redirect } from "next/navigation";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png"];
@@ -59,20 +58,24 @@ export async function createPost(
   }
 
   // Insert post into database
-  const { error } = await supabase.from("posts").insert({
-    user_id: user.id,
-    type: postType,
-    item_name: itemName,
-    category,
-    date,
-    location,
-    description: description,
-    image_url: imageUrl,
-  });
+  const { data, error } = await supabase
+    .from("posts")
+    .insert({
+      user_id: user.id,
+      type: postType,
+      item_name: itemName,
+      category,
+      date,
+      location,
+      description,
+      image_url: imageUrl,
+    })
+    .select("id")
+    .single();
 
   if (error) {
     throw new Error(error.message);
   }
 
-  redirect("/posts");
+  return data.id;
 }
