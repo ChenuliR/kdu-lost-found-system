@@ -28,6 +28,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { AlertCircle, ImageUp, Info, Loader2, X } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const categories = [
   {
@@ -91,6 +92,7 @@ const categories = [
 const ALLOWED_TYPES = ["image/jpeg", "image/png"];
 
 export default function PostForm({ postType }: { postType: PostType }) {
+  const router = useRouter();
   const dateInputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -174,7 +176,8 @@ export default function PostForm({ postType }: { postType: PostType }) {
       fd.append("description", formData.description);
       fd.append("image", photoFile || new Blob());
 
-      await createPost(fd, postType);
+      const postId = await createPost(fd, postType);
+      router.push(`/posts/${postId}`);
     } catch (err) {
       const error = err instanceof Error ? err.message : "Error occurred";
       setError(error);
