@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PageLayout from "@/components/page-layout";
+import { Button } from "@/components/ui/button";
 import { getAuthUser } from "@/lib/auth/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server-client";
+import { Pencil } from "lucide-react";
 
 export default async function PostDetailsPage({
   params,
@@ -26,6 +28,10 @@ export default async function PostDetailsPage({
   return (
     <PageLayout title={post.item_name} subtitle={`Reported as ${post.type}`}>
       <article className="max-w-3xl space-y-6">
+        <Button nativeButton={false} render={<Link href={`/posts/${post.id}/edit`} />}>
+          <Pencil />
+          Edit Post
+        </Button>
         {post.image_url && (
           <img
             src={post.image_url}
