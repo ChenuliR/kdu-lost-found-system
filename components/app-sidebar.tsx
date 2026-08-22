@@ -13,14 +13,11 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { getSupabaseBrowserClient } from "@/lib/supabase/browser-client";
 import { User } from "@supabase/supabase-js";
-import { Box, ChevronsUpDown, CircleUser, Compass, ImageIcon } from "lucide-react";
+import { Box, Compass, ImageIcon } from "lucide-react";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { NavUser } from "./nav-user";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 const data = {
   navMain: [
@@ -34,12 +31,12 @@ const data = {
         },
         {
           title: "My Posts",
-          url: "*",
+          url: "/posts/my-posts",
           icon: ImageIcon,
         },
         {
           title: "My Claims",
-          url: "*",
+          url: "",
           icon: Box,
         },
       ],
@@ -51,9 +48,7 @@ type AuthUser = {
   user: User | null;
 };
 
-export default function AppSidebar(
-  { user }: AuthUser,
-) {
+export default function AppSidebar({ user }: AuthUser) {
   const pathname = usePathname();
 
   return (
@@ -87,10 +82,15 @@ export default function AppSidebar(
               <SidebarMenu>
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton isActive={pathname === item.url}>
-                      <item.icon />
-                      <a href={item.url}>{item.title}</a>
-                    </SidebarMenuButton>
+                    <SidebarMenuButton
+                      isActive={pathname === item.url}
+                      render={
+                        <a href={item.url}>
+                          <item.icon />
+                          {item.title}
+                        </a>
+                      }
+                    ></SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>

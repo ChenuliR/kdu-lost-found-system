@@ -8,15 +8,15 @@ export default function PageLayout({
   separator=false,
   children,
 }: {
-  title: string;
+  title?: string;
   subtitle?: string;
   badge?: React.ReactElement;
   separator?: boolean;
   children: React.ReactNode;
 }) {
   return (
-    <main className="space-y-8">
-      <div className="space-y-2">
+    <main className="space-y-8 w-full">
+      {title && <div className="space-y-2">
         <h1 className="font-bold lg:text-3xl text-2xl">{title}</h1>
         <div className="flex justify-between items-center">
           <p className="text-muted-foreground/80 text-sm font-semibold">
@@ -26,7 +26,7 @@ export default function PageLayout({
         </div>
 
         {separator && <Separator />}
-      </div>
+      </div>}
       {children}
     </main>
   );

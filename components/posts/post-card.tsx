@@ -4,7 +4,6 @@ import { Calendar } from "lucide-react";
 import { Badge } from "../ui/badge";
 
 export default function PostCard({ post }: { post: any }) {
-  console.log(post.image_url);
   return (
     <div className="bg-white rounded-sm shadow overflow-hidden hover:shadow-lg transition-shadow">
       {/* Image Container */}
