@@ -31,7 +31,7 @@ const data = {
         },
         {
           title: "My Posts",
-          url: "/posts/my-posts",
+          url: "/posts",
           icon: ImageIcon,
         },
         {
