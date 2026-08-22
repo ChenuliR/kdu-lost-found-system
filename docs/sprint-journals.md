@@ -93,7 +93,6 @@ The remaining frontend screens and functionalities are still under development.
 
 ### Ceremonies
 Sprint Planning 1
-Date: August 6, 2026
 Attendees: Scrum Master, Product Owner, Developers (Frontend & Backend), UI/UX Designer
 Outcome: 6 stories pulled into Sprint 1. Estimates assigned. Sprint Goal defined.
 
@@ -103,7 +102,7 @@ Outcome: 6 stories pulled into Sprint 1. Estimates assigned. Sprint Goal defined
 
 | Date | Key Updates | Blockers |
 | :--- | :--- | :--- |
-| **August 6, 2026** | Tooling setup complete. GitHub board, labels, and milestones created. Sprint Planning conducted. | None. |
+| **August 4, 2026** | Tooling setup complete. GitHub board, labels, and milestones created. Sprint Planning conducted. | None. |
 | **August 10, 2026** | Figma designs approved by client. Frontend setup complete. Backend API for Sign-up in progress. | Frontend waiting on Backend API. |
 | **August 16, 2026** | User Login and Logout functionalities were completed. The client reviewed the implemented UI and requested changes to the navigation bar. | Navigation bar requires modifications based on client feedback. |
 
@@ -116,4 +115,94 @@ Outcome: 6 stories pulled into Sprint 1. Estimates assigned. Sprint Goal defined
 | Stories Completed | 2 |
 | Total Story Points | 20 |
 | Velocity | 4 |
+
+---
+
+## Sprint 2: Core Development & MVP Implementation
+
+**Sprint Duration:** Weeks 3–4 (August 19 – September 1, 2026)
+
+**Sprint Goal:** Complete the core Lost & Found functionality carried forward from Sprint 1 and enable users to create, manage, search, filter, and view Lost & Found item listings.
+
+---
+
+### Key Activities
+
+#### 1. Sprint 2 Planning
+
+Sprint 2 began with a review of the unfinished work from Sprint 1.
+
+The following stories were carried forward from Sprint 1:
+
+- **US-03:** Create Lost Item Post
+- **US-04:** Create Found Item Post
+- **US-05:** Upload Item Photo
+- **US-11:** View Item Details
+
+Additional stories were selected from the Product Backlog:
+
+- **US-06:** Edit Own Post
+- **US-07:** Delete Own Post
+- **US-08:** Update Post Status
+- **US-09:** Search Items
+- **US-10:** Filter Listings
+
+**Sprint Goal:**  
+"Complete the core Lost & Found posting functionality and enable users to manage, search, filter, and view item listings."
+
+---
+#### 2. Post Module Development
+
+Development continued on the core Post Module.
+
+The following functionality was implemented/developed:
+
+- Create Lost Item Post
+- Create Found Item Post
+- Item name and category selection
+- Item description
+- Lost/Found date
+- Location information
+- Item photo upload
+- Post status handling
+
+The development team integrated the posting functionality with the backend and database.
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Ceremonies
+
+#### Sprint Planning 2
+
+**Date:** [Insert actual date]
+
+**Attendees:** Scrum Master, Product Owner, Developers (Frontend & Backend), UI/UX Designer
+
+**Outcome:**  
+The team reviewed the unfinished Sprint 1 stories and selected additional Product Backlog items for Sprint 2. Sprint priorities and responsibilities were discussed, and the Sprint Goal was established.
+
+---
+
+### Daily Standup Logs
+
+| Date | Key Updates | Blockers |
+| :--- | :--- | :--- |
+| **August 18, 2026** | Sprint 2 planning completed. Sprint 1 unfinished stories were reviewed and carried forward. | None |
+
 
