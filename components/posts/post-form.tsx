@@ -27,7 +27,6 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { AlertCircle, ImageUp, Info, Loader2, X } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -107,7 +106,6 @@ export default function PostForm({
     image_url: string | null;
   };
 }) {
-  const router = useRouter();
   const dateInputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
