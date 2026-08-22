@@ -49,3 +49,11 @@
 | US-15 | Review Claims | High | #15 |
 | US-16 | Moderate Posts | Medium | #16 |
 | US-17 | View Dashboard | Medium | #17 |
+---
+
+## MVP Scope (Milestone 1 - Target: Aug 28)
+- **Authentication:** User Login (`#1`)
+- **Post Management:** Create Lost Post (`#3`), Create Found Post (`#4`)
+- **Search & Claim:** Search Items (`#9`), Submit Claim Request (`#12`)
+
+*Reviewed & prioritized by Product Owner for Sprint 1 & 2.*
