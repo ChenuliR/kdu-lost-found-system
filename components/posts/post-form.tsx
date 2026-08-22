@@ -1,6 +1,6 @@
 "use client";
 
-import { createPost } from "@/app/(authenticated)/posts/actions";
+import { createPost, updatePost } from "@/app/(authenticated)/posts/actions";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -91,20 +91,36 @@ const categories = [
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png"];
 
-export default function PostForm({ postType }: { postType: PostType }) {
+export default function PostForm({
+  postType,
+  initialPost,
+}: {
+  postType: PostType;
+  initialPost?: {
+    id: string;
+    item_name: string;
+    category: string;
+    date: string;
+    location: string;
+    description: string;
+    image_url: string | null;
+  };
+}) {
   const router = useRouter();
   const dateInputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(
+    initialPost?.image_url ?? null,
+  );
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const [formData, setFormData] = useState<PostForm>({
-    itemName: "",
-    category: null,
-    date: "",
-    location: "",
-    description: "",
+    itemName: initialPost?.item_name ?? "",
+    category: initialPost?.category ?? null,
+    date: initialPost?.date ?? "",
+    location: initialPost?.location ?? "",
+    description: initialPost?.description ?? "",
     image: null,
   });
 
@@ -176,7 +192,9 @@ export default function PostForm({ postType }: { postType: PostType }) {
       fd.append("description", formData.description);
       fd.append("image", photoFile || new Blob());
 
-      const postId = await createPost(fd, postType);
+      const postId = initialPost
+        ? await updatePost(initialPost.id, fd, postType)
+        : await createPost(fd, postType);
       router.push(`/posts/${postId}`);
     } catch (err) {
       const error = err instanceof Error ? err.message : "Error occurred";
@@ -336,6 +354,7 @@ export default function PostForm({ postType }: { postType: PostType }) {
                           className="max-h-48 rounded-lg object-cover"
                         />
                         <Button
+                          type="button"
                           size={"icon-sm"}
                           // variant={"outline"}
                           onClick={handleClearPhoto}
@@ -359,7 +378,7 @@ export default function PostForm({ postType }: { postType: PostType }) {
                         }}
                         style={{ display: "none" }}
                         id="file-input"
-                        required
+                        required={!initialPost}
                         disabled={isLoading}
                       />
                       <label htmlFor="file-input" className="cursor-pointer">
@@ -396,7 +415,7 @@ export default function PostForm({ postType }: { postType: PostType }) {
                   Uploading...
                 </>
               ) : (
-                "Create Post"
+                initialPost ? "Save Changes" : "Create Post"
               )}
             </Button>
             <Button
@@ -405,7 +424,7 @@ export default function PostForm({ postType }: { postType: PostType }) {
               disabled={isLoading}
               className="cursor-pointer"
               nativeButton={false}
-              render={<Link href={"/posts"} replace />}
+              render={<Link href={initialPost ? `/posts/${initialPost.id}` : "/posts"} replace />}
             >
               Cancel
             </Button>
