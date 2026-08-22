@@ -187,11 +187,7 @@ The development team integrated the posting functionality with the backend and d
 
 
 ### Ceremonies
-
-#### Sprint Planning 2
-
-**Date:** [Insert actual date]
-
+Sprint Planning 2
 **Attendees:** Scrum Master, Product Owner, Developers (Frontend & Backend), UI/UX Designer
 
 **Outcome:**  
