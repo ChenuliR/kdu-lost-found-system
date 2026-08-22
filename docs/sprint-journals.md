@@ -120,7 +120,7 @@ Outcome: 6 stories pulled into Sprint 1. Estimates assigned. Sprint Goal defined
 
 ## Sprint 2: Core Development & MVP Implementation
 
-**Sprint Duration:** Weeks 3–4 (August 19 – September 1, 2026)
+**Sprint Duration:** Weeks 3 (August 18 – August 25 , 2026)
 
 **Sprint Goal:** Complete the core Lost & Found functionality carried forward from Sprint 1 and enable users to create, manage, search, filter, and view Lost & Found item listings.
 
