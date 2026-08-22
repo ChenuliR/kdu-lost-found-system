@@ -19,7 +19,7 @@ export default async function AuthenticatedLayout({
         <AppSidebar user={user} />
         <main className="flex-1">
           <Navbar />
-          <section className="py-8 max-w-7xl w-full mx-auto">
+          <section className="py-8 max-w-6xl w-full mx-auto">
             {children}
           </section>
         </main>
