@@ -48,6 +48,30 @@ async function updatePost(formData: FormData) {
   redirect("/posts/my-posts");
 }
 
+async function deletePost(formData: FormData) {
+  "use server";
+
+  const supabase = await createSupabaseServerClient();
+  const user = await getAuthUser();
+  const postId = formData.get("postId");
+
+  if (typeof postId !== "string" || !postId) {
+    throw new Error("Post could not be identified");
+  }
+
+  const { error } = await supabase
+    .from("posts")
+    .delete()
+    .eq("id", postId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  redirect("/posts/my-posts");
+}
+
 export default async function MyPostsPage() {
   const userPosts = await getUserPosts();
 
@@ -65,66 +89,74 @@ export default async function MyPostsPage() {
       <div className="mt-6 space-y-3">
         <h2 className="text-lg font-semibold">Your active posts</h2>
         {userPosts.map((post) => (
-          <details key={post.id} className="rounded-sm border p-4">
-            <summary className="flex cursor-pointer list-none items-center justify-between rounded-sm bg-muted px-4 py-3 font-medium hover:bg-muted/80">
-              <span>{post.item_name}</span>
-              <span className="rounded-sm border bg-background px-3 py-1 text-sm">
-                Edit post
-              </span>
-            </summary>
-            <form action={updatePost} className="mt-4 grid gap-3 md:grid-cols-2">
+          <div key={post.id} className="rounded-sm border p-4">
+            <details>
+              <summary className="flex cursor-pointer list-none items-center justify-between rounded-sm bg-muted px-4 py-3 font-medium hover:bg-muted/80">
+                <span>{post.item_name}</span>
+                <span className="rounded-sm border bg-background px-3 py-1 text-sm">
+                  Edit post
+                </span>
+              </summary>
+              <form action={updatePost} className="mt-4 grid gap-3 md:grid-cols-2">
+                <input type="hidden" name="postId" value={post.id} />
+                <label className="grid gap-1 text-sm">
+                  Item name
+                  <input
+                    className="rounded-sm border px-3 py-2"
+                    name="itemName"
+                    defaultValue={post.item_name}
+                    required
+                  />
+                </label>
+                <label className="grid gap-1 text-sm">
+                  Category
+                  <input
+                    className="rounded-sm border px-3 py-2"
+                    name="category"
+                    defaultValue={post.category}
+                    required
+                  />
+                </label>
+                <label className="grid gap-1 text-sm">
+                  Date
+                  <input
+                    className="rounded-sm border px-3 py-2"
+                    type="date"
+                    name="date"
+                    defaultValue={post.date}
+                    required
+                  />
+                </label>
+                <label className="grid gap-1 text-sm">
+                  Location
+                  <input
+                    className="rounded-sm border px-3 py-2"
+                    name="location"
+                    defaultValue={post.location}
+                    required
+                  />
+                </label>
+                <label className="grid gap-1 text-sm md:col-span-2">
+                  Description
+                  <textarea
+                    className="rounded-sm border px-3 py-2"
+                    name="description"
+                    defaultValue={post.description}
+                    required
+                  />
+                </label>
+                <Button type="submit" className="w-fit">
+                  Save changes
+                </Button>
+              </form>
+            </details>
+            <form action={deletePost} className="mt-3">
               <input type="hidden" name="postId" value={post.id} />
-              <label className="grid gap-1 text-sm">
-                Item name
-                <input
-                  className="rounded-sm border px-3 py-2"
-                  name="itemName"
-                  defaultValue={post.item_name}
-                  required
-                />
-              </label>
-              <label className="grid gap-1 text-sm">
-                Category
-                <input
-                  className="rounded-sm border px-3 py-2"
-                  name="category"
-                  defaultValue={post.category}
-                  required
-                />
-              </label>
-              <label className="grid gap-1 text-sm">
-                Date
-                <input
-                  className="rounded-sm border px-3 py-2"
-                  type="date"
-                  name="date"
-                  defaultValue={post.date}
-                  required
-                />
-              </label>
-              <label className="grid gap-1 text-sm">
-                Location
-                <input
-                  className="rounded-sm border px-3 py-2"
-                  name="location"
-                  defaultValue={post.location}
-                  required
-                />
-              </label>
-              <label className="grid gap-1 text-sm md:col-span-2">
-                Description
-                <textarea
-                  className="rounded-sm border px-3 py-2"
-                  name="description"
-                  defaultValue={post.description}
-                  required
-                />
-              </label>
-              <Button type="submit" className="w-fit">
-                Save changes
+              <Button type="submit" variant="destructive">
+                Delete post
               </Button>
             </form>
-          </details>
+          </div>
         ))}
       </div>
       <PostFilter posts={userPosts} />
