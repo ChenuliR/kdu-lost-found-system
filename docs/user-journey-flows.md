@@ -36,3 +36,36 @@ flowchart TD
 
     M --> S([END])
 ```
+<br>
+
+### Browse, Search, Filter & View Post Details
+
+```mermaid
+flowchart TD
+
+    A[Successful Login] --> B[Browse Page]
+
+    B --> C[Display All Lost and Found Posts]
+
+    C --> D{Search or Filter Posts}
+
+    D -->|No| E[Browse Available Posts]
+
+    D -->|Yes| F[Search or Apply Filters]
+
+    F --> G[Display Matching Posts]
+
+    G --> H{Select a Post}
+
+    E --> H
+
+    H -->|Yes| I[View Item Details]
+
+    I --> J[Display Category]
+    J --> K[Display Date]
+    K --> L[Display Location]
+    L --> M[Display Description]
+
+    H -->|No| E
+```
+
