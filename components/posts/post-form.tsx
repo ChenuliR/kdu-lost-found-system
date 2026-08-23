@@ -142,7 +142,13 @@ export default function PostForm({ postType }: { postType: PostType }) {
   const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dropover") {
+    console.log(
+      "Drag event:",
+      e.type,
+      "dragActive will be:",
+      e.type === "dragenter" || e.type === "dragover",
+    );
+    if (e.type === "dragenter" || e.type === "dragover") {
       setDragActive(true);
     } else if (e.type === "dragleave") {
       setDragActive(false);
@@ -325,16 +331,16 @@ export default function PostForm({ postType }: { postType: PostType }) {
                   } ${isLoading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                 >
                   {photoPreview ? (
-                    <div className="flex flex-col items-center gap-4">
+                    <div className="flex flex-col items-center gap-4 pointer-events-auto">
                       <div className="relative">
                         <img
                           src={photoPreview}
                           alt="Preview"
-                          className="max-h-48 rounded-lg object-cover"
+                          className="max-h-48 rounded-lg object-cover pointer-events-none"
                         />
                         <Button
+                          type="button"
                           size={"icon-sm"}
-                          // variant={"outline"}
                           onClick={handleClearPhoto}
                           disabled={isLoading}
                           className="flex items-center gap-2 text-sm rounded-sm border border-primary disabled:opacity-50 absolute top-0 right-0 translate-x-3 -translate-y-3 cursor-pointer"
@@ -356,10 +362,12 @@ export default function PostForm({ postType }: { postType: PostType }) {
                         }}
                         style={{ display: "none" }}
                         id="file-input"
-                        required
                         disabled={isLoading}
                       />
-                      <label htmlFor="file-input" className="cursor-pointer">
+                      <label
+                        htmlFor="file-input"
+                        className="cursor-pointer pointer-events-none"
+                      >
                         <div className="flex flex-col items-center gap-2">
                           <ImageUp
                             size={60}

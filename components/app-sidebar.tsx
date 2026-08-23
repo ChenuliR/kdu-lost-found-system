@@ -34,12 +34,12 @@ const data = {
         },
         {
           title: "My Posts",
-          url: "*",
+          url: "/posts/my-posts",
           icon: ImageIcon,
         },
         {
           title: "My Claims",
-          url: "*",
+          url: "",
           icon: Box,
         },
       ],
@@ -64,13 +64,14 @@ export default function AppSidebar(
             <a href={"/"}>
               <SidebarMenuButton
                 size={"lg"}
-                className="overflow-hidden rounded-xs"
+                className="overflow-hidden rounded-xs cursor-pointer"
               >
                 <Image
                   src={"/logo.svg"}
                   alt="logo"
-                  width={28}
-                  height={28}
+                  width={26}
+                  height={26}
+                  priority
                   className="rounded-xs"
                 />
                 <span className="text-lg font-bold">Lost & Found</span>
@@ -87,10 +88,15 @@ export default function AppSidebar(
               <SidebarMenu>
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton isActive={pathname === item.url}>
-                      <item.icon />
-                      <a href={item.url}>{item.title}</a>
-                    </SidebarMenuButton>
+                    <SidebarMenuButton
+                      isActive={pathname === item.url}
+                      render={
+                        <a href={item.url}>
+                          <item.icon />
+                          {item.title}
+                        </a>
+                      }
+                    ></SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>
