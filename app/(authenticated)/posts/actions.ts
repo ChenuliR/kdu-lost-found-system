@@ -2,6 +2,7 @@
 
 import { getAuthUser } from "@/lib/auth/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server-client";
+import { redirect } from "next/navigation";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png"];
@@ -144,4 +145,21 @@ export async function updatePost(
   }
 
   return data.id;
+}
+
+export async function deletePost(id: string) {
+  const supabase = await createSupabaseServerClient();
+  const user = await getAuthUser();
+
+  const { error } = await supabase
+    .from("posts")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", user.id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  redirect("/posts");
 }
