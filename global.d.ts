@@ -4,6 +4,8 @@ type SupabaseSchema = Record<string, never>;
 
 type PostType = "lost" | "found";
 
+type PostTypeFilter = "lost" | "found" | "all";
+
 interface PostForm {
     itemName: string;
     category: string | null;
