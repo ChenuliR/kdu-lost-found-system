@@ -1,70 +1,73 @@
 "use client";
 
-import { Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
 import PostCard from "./post-card";
 import Link from "next/link";
 
 export default function PostFilter({ posts }: { posts: any[] }) {
-  const router = useRouter();
-  const [filter, setFilter] = useState<PostTypeFilter>("all");
+  const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [displayedPosts, setDisplayedPosts] = useState<any[]>(posts ?? []);
 
-  const filteredPosts = posts.filter((post) => {
-    if (filter === "all") return true;
-    return post.type === filter;
-  });
+  useEffect(() => setDisplayedPosts(posts ?? []), [posts]);
 
-  const handleFilterChange = (value: string | null) => {
-    setFilter((value?.toLowerCase() as PostTypeFilter) ?? "all");
+  // debounced search by item_name only
+  useEffect(() => {
+    let mounted = true;
+    setLoading(true);
+    const timer = setTimeout(() => {
+      if (!mounted) return;
+      const term = query.trim().toLowerCase();
+      const filtered = (posts || []).filter((post) => {
+        if (!term) return true;
+        const name = (post.item_name || "").toLowerCase();
+        return name.includes(term);
+      });
+      setDisplayedPosts(filtered);
+      setLoading(false);
+    }, 250);
+
+    return () => {
+      mounted = false;
+      clearTimeout(timer);
+    };
+  }, [query, posts]);
+
+  const applyNow = () => {
+    setLoading(true);
+    setTimeout(() => setLoading(false), 150);
   };
 
   return (
     <div>
-      <div className="flex justify-between gap-2 mb-4">
-        {
-          <Select
-            value={filter.charAt(0).toUpperCase() + filter.slice(1)}
-            onValueChange={handleFilterChange}
-          >
-            <SelectTrigger id="filter" className={"w-45"}>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                {(["all", "lost", "found"] as const).map((item) => (
-                  <SelectItem key={item} value={item}>
-                    {item.charAt(0).toUpperCase() + item.slice(1)}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        }
-        <Button
-          onClick={() => router.push("/posts/new")}
-          className="cursor-pointer"
-        >
-          <Plus />
-          <span>Create Post</span>
+      <div className="flex items-center justify-center gap-2 mb-4">
+        <input
+          aria-label="Search posts"
+          placeholder="Search by item name"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="w-[80%] rounded-sm border px-3 py-2"
+        />
+        <Button onClick={applyNow} className="w-[15%] p">
+          Search
         </Button>
       </div>
-      {filteredPosts.length === 0 ? (
+
+      {loading ? (
         <div className="h-30 flex items-center justify-center">
-          <p className="text-muted-foreground text-sm">No posts found.</p>
+          <svg className="h-6 w-6 animate-spin text-muted-foreground" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+          </svg>
+        </div>
+      ) : displayedPosts.length === 0 ? (
+        <div className="h-30 flex flex-col items-center justify-center">
+          <p className="text-muted-foreground text-sm">No items found matching your search.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-4 flex-wrap gap-4">
-          {filteredPosts.map((post) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {displayedPosts.map((post) => (
             <Link href={`/posts/${post.id}`} key={post.id}>
               <PostCard post={post} />
             </Link>
