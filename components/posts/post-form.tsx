@@ -410,7 +410,7 @@ export default function PostForm({ postType }: { postType: PostType }) {
               disabled={isLoading}
               className="cursor-pointer"
               nativeButton={false}
-              render={<Link href={"/posts"} replace />}
+             render={<Link href={"/posts/my-posts"} replace />}
             >
               Cancel
             </Button>

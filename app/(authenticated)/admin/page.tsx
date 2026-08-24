@@ -30,6 +30,7 @@ type Claim = {
   age: string;
   tone: string;
   initials: string;
+  status: "Active" | "Claimed" | "Closed";
 };
 
 const initialClaims: Claim[] = [
@@ -40,6 +41,7 @@ const initialClaims: Claim[] = [
     age: "2 hours ago",
     tone: "bg-amber-100 text-amber-900",
     initials: "BW",
+    status: "Active",
   },
   {
     id: 2,
@@ -48,6 +50,7 @@ const initialClaims: Claim[] = [
     age: "5 hours ago",
     tone: "bg-slate-200 text-slate-700",
     initials: "AP",
+    status: "Active",
   },
   {
     id: 3,
@@ -56,6 +59,7 @@ const initialClaims: Claim[] = [
     age: "1 day ago",
     tone: "bg-muted text-muted-foreground",
     initials: "K",
+    status: "Active",
   },
 ];
 
@@ -87,6 +91,17 @@ export default function AdminDashboardPage() {
   const dismissClaim = (claimId: number) => {
     setClaims((currentClaims) =>
       currentClaims.filter((claim) => claim.id !== claimId),
+    );
+  };
+
+  const updateClaimStatus = (
+    claimId: number,
+    status: Claim["status"],
+  ) => {
+    setClaims((currentClaims) =>
+      currentClaims.map((claim) =>
+        claim.id === claimId ? { ...claim, status } : claim,
+      ),
     );
   };
 
@@ -189,18 +204,44 @@ export default function AdminDashboardPage() {
                       </div>
                     </div>
                     <div className="flex shrink-0 items-center gap-2 sm:pl-4">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => dismissClaim(claim.id)}
+                      <span
+                        className={`rounded-full px-2.5 py-1 text-xs font-medium ${
+                          claim.status === "Claimed"
+                            ? "bg-emerald-100 text-emerald-800"
+                            : claim.status === "Closed"
+                              ? "bg-slate-200 text-slate-700"
+                              : "bg-amber-100 text-amber-800"
+                        }`}
                       >
-                        <X />
-                        Reject
-                      </Button>
-                      <Button size="sm" onClick={() => dismissClaim(claim.id)}>
-                        <Check />
-                        Approve
-                      </Button>
+                        {claim.status}
+                      </span>
+                      {claim.status === "Active" ? (
+                        <>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => dismissClaim(claim.id)}
+                          >
+                            <X />
+                            Reject
+                          </Button>
+                          <Button
+                            size="sm"
+                            onClick={() => updateClaimStatus(claim.id, "Claimed")}
+                          >
+                            <Check />
+                            Approve
+                          </Button>
+                        </>
+                      ) : claim.status === "Claimed" ? (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => updateClaimStatus(claim.id, "Closed")}
+                        >
+                          Close post
+                        </Button>
+                      ) : null}
                     </div>
                   </div>
                 ))

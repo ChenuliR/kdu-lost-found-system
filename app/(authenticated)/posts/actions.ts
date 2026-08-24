@@ -74,7 +74,7 @@ export async function createPost(
     throw new Error(error.message);
   }
 
-  redirect("/posts");
+  redirect("/posts/my-posts");
 }
 
 export async function getUserPosts(type?: PostType) {
