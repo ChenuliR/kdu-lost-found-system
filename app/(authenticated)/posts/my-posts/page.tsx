@@ -81,7 +81,7 @@ export default async function MyPostsPage() {
       subtitle={"Manage your lost and found listings"}
       badge={
         <Badge variant={"secondary"} className="mb-0">
-          {userPosts.length} Active Posts
+          {userPosts.length} Posts
         </Badge>
       }
       separator={true}
@@ -92,7 +92,14 @@ export default async function MyPostsPage() {
           <div key={post.id} className="rounded-sm border p-4">
             <details>
               <summary className="flex cursor-pointer list-none items-center justify-between rounded-sm bg-muted px-4 py-3 font-medium hover:bg-muted/80">
-                <span>{post.item_name}</span>
+                <span className="flex items-center gap-3">
+                  <span>{post.item_name}</span>
+                  <Badge
+                    variant={post.status === "Active" ? "secondary" : "outline"}
+                  >
+                    {post.status ?? "Active"}
+                  </Badge>
+                </span>
                 <span className="rounded-sm border bg-background px-3 py-1 text-sm">
                   Edit post
                 </span>
