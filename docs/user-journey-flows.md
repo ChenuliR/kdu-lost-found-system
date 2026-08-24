@@ -1,28 +1,71 @@
-# User Journey Flows
+## User Journey Flows
 
-## Login User Journey
+### User Registration & Authentication
 
-### Overview
+```mermaid
+flowchart TD
 
-This user journey illustrates the steps a user follows to log into the system. It shows the flow from opening the system through credential validation and accessing the dashboard.
+    A([START]) --> B[Open Lost and Found Portal]
+    B --> C[Login Page]
 
-### Login Workflow
+    C --> D{Select Sign Up?}
 
-<img width="1888" height="776" alt="login-user-journey" src="https://github.com/user-attachments/assets/9e7b3b3e-7d00-4bc3-aa1c-e30003f563e3" />
+    D -->|No| E[Enter University Email
+         Enter Password]
+    E --> F[Click Login]
+    F --> G{Are Login Credentials Valid}
+ 
+    G -->|No| H[Display Login Error]
+    H --> C
 
+    G -->|Yes| I[Identify User Role]
+    I --> J{Is User an Admin}
 
+    J -->|No| K[Student / Staff User]
+    J -->|Yes| L[Admin User]
 
-### Workflow Steps
+    K --> M[Lost and Found Home Page]
+    L --> M
 
-1. **Open System** – The user opens the system.
-2. **Login Page** – The user navigates to the login page.
-3. **Enter KDU Username & Password** – The user enters their login credentials.
-4. **Click Login** – The user submits the login form.
-5. **Validate Credentials** – The system verifies the provided credentials.
-6. **Valid Credentials?**
-   - **Yes** → The user is granted access to the dashboard.
-   - **No** → An error message is displayed and the user can try logging in again.
+    D -->|Yes| N[Sign Up Page]
+    N --> O[Enter University Email
+         Enter Password]
+    O --> P[Click Create Account]
+    P --> Q[Create User Account]
+    Q --> C
 
-### Purpose
+    M --> S([END])
+```
+<br>
 
-The login user journey was created to clearly define the user's interaction flow and ensure that the login process is simple, consistent, and easy to understand.
+### Browse, Search, Filter & View Post Details
+
+```mermaid
+flowchart TD
+
+    A[Successful Login] --> B[Browse Page]
+
+    B --> C[Display All Lost and Found Posts]
+
+    C --> D{Search or Filter Posts}
+
+    D -->|No| E[Browse Available Posts]
+
+    D -->|Yes| F[Search or Apply Filters]
+
+    F --> G[Display Matching Posts]
+
+    G --> H{Select a Post}
+
+    E --> H
+
+    H -->|Yes| I[View Item Details]
+
+    I --> J[Display Category]
+    J --> K[Display Date]
+    K --> L[Display Location]
+    L --> M[Display Description]
+
+    H -->|No| E
+```
+
