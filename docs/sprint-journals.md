@@ -376,6 +376,55 @@ The Client Team approved the implemented features and provided no major changes 
 
 **Stories Completed:** 9
 
+---
+
+# Story Point Estimation
+
+The development team uses the Fibonacci sequence to estimate the relative effort and complexity of User Stories.
+
+The Story Point scale used by the team is:
+
+| Story Points | Meaning |
+| :---: | :--- |
+| **1** | Very simple |
+| **2** | Simple |
+| **3** | Moderate |
+| **5** | Medium/High complexity |
+| **8** | Complex |
+| **13** | Very large; should ideally be split into smaller stories |
+
+Story points are assigned based on:
+
+- Technical complexity
+- Amount of development effort
+- Integration requirements
+- Uncertainty or risk
+- Testing effort
+
+Story points represent **relative complexity and effort rather than development hours**. The team discusses and agrees on the estimated points during Sprint Planning.
+
+### Story Point Estimates
+
+| User Story | Story Points |
+| :--- | :---: |
+| **US-01 User Login** | 3 |
+| **US-02 User Logout** | 1 |
+| **US-03 Create Lost Item Post** | 5 |
+| **US-04 Create Found Item Post** | 5 |
+| **US-05 Upload Item Photo** | 3 |
+| **US-06 Edit Own Post** | 3 |
+| **US-07 Delete Own Post** | 2 |
+| **US-08 Update Post Status** | 2 |
+| **US-09 Search Items** | 3 |
+| **US-10 Filter Listings** | 5 |
+| **US-11 View Item Details** | 3 |
+| **US-12 Submit Claim Request** | 5 |
+| **US-13 Track Claim Status** | 3 |
+| **US-14 Receive Claim Notifications** | 5 |
+| **US-15 Review Claim Requests** | 5 |
+| **US-16 Moderate Posts** | 5 |
+| **US-17 View Dashboard** | 5 |
+
 **Completion Rate:** 100%
 
 **Sprint Velocity:** 31 Story Points
