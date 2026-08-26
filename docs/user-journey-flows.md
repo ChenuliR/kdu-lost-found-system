@@ -68,4 +68,51 @@ flowchart TD
 
     H -->|No| E
 ```
+<br>
+
+### Create and Manage Posts
+
+```mermaid
+flowchart TD
+
+    A[Browse Page] --> B[Click New Post]
+
+    B --> C[New Post Form]
+
+    C --> D{Select Post Type}
+
+    D -->|Lost Something| E[Enter Item Name]
+    D -->|Found Something| E
+
+    E --> F[Select Category]
+    F --> G[Enter Date]
+    G --> H[Enter Location]
+    H --> I[Enter Description]
+    I --> J[Upload Photo]
+
+    J --> K[Click Create Post]
+    K --> L[Create Lost or Found Post]
+
+    L --> M[My Posts Page]
+    M --> N[Display User Created Posts]
+
+    N --> O{Select a Post ?}
+
+    O -->|Yes| P[Item Details]
+
+    P --> Q{Choose Action}
+
+    Q -->|Edit| R[Edit Post]
+    R --> S[Update Post]
+    S --> M
+
+    Q -->|Delete| T[Confirm Delete]
+    T --> U{Confirm Deletion}
+
+    U -->|No| P
+    U -->|Yes| V[Delete Post]
+    V --> M
+
+    O -->|No| N
+```
 
