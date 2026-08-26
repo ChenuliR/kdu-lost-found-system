@@ -115,4 +115,32 @@ flowchart TD
 
     O -->|No| N
 ```
+<br>
 
+### Student/Staff Profile Management
+
+```mermaid
+flowchart TD
+
+    A[Browse Page] --> B[Click Profile Icon]
+
+    B --> C[Profile Menu]
+
+    C --> D{Select Option}
+
+    D -->|My Profile| E[My Profile Page]
+    D -->|Logout| F[Logout]
+
+    E --> G[Display Profile Details]
+
+    E --> H[Display Quick Status]
+
+    H --> I[Items Reported]
+    H --> J[Successfully Claimed]
+
+    G --> K[View Profile Information]
+    I --> L[View Number of Items Reported]
+    J --> M[View Number of Successfully Claimed Items]
+
+    F --> N[Login Page]
+```
