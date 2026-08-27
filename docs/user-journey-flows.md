@@ -231,3 +231,20 @@ flowchart TD
     Q -->|Reject| L
     Q -->|Pending| K
 ```
+<br>
+
+### Logout
+
+```mermaid
+flowchart TD
+
+    A[Browse Page] --> B[Click Profile Icon]
+
+    B --> C[Profile Menu]
+
+    C --> D[Click Logout]
+
+    D --> E[Logout User]
+
+    E --> F[Login Page]
+```
