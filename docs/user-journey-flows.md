@@ -190,3 +190,44 @@ flowchart TD
     U --> W
 
     G --> X[Login Page]
+```
+<br>
+
+### Claim an Item and Track Claim
+
+```mermaid
+flowchart TD
+
+    A[Browse Page] --> B[Display Lost and Found Posts]
+
+    B --> C[Select a Post]
+
+    C --> D[Item Details Page]
+
+    D --> E[Click Claim Request]
+
+    E --> F[Send Claim Request]
+
+    F --> G[Claim Request Displayed in Admin Portal]
+
+    F --> H[My Claims Page]
+
+    H --> I[Display Claimed Posts]
+
+    I --> J[Approved Claims]
+    I --> K[Pending Review Claims]
+    I --> L[Rejected Claims]
+
+    H --> M[Display Claim Statistics]
+
+    M --> N[Total Claims Filed]
+    M --> O[Total Claims Resolved]
+
+    G --> P[Admin Reviews Claim Request]
+
+    P --> Q{Admin Decision}
+
+    Q -->|Approve| J
+    Q -->|Reject| L
+    Q -->|Pending| K
+```
