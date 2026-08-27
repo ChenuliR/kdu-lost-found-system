@@ -11,12 +11,38 @@ import {
 } from "@/components/ui/card";
 import { Field, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { getAuthUser } from "@/lib/auth/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server-client";
+import { deletePost, updatePost } from "../actions";
 import { Calendar, KeyRound, MapPin, Send, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+
+const categories = [
+  ["Laptop/Computer", "laptop/computer"],
+  ["Phone", "phone"],
+  ["Wallet/Cash", "wallet/cash"],
+  ["Backpack/Bag", "backpack/bag"],
+  ["Keys", "keys"],
+  ["Headphones/Earbuds", "headphones/earbuds"],
+  ["Watch", "watch"],
+  ["Water Bottle", "water-bottle"],
+  ["Clothing", "clothing"],
+  ["Documents/ID", "documents/id"],
+  ["Books/Notebooks", "books/notebooks"],
+  ["Jewellery", "jewellery"],
+  ["Other", "other"],
+] as const;
 
 export default async function PostDetailsPage({
   params,
@@ -25,6 +51,7 @@ export default async function PostDetailsPage({
 }) {
   const { id } = await params;
   const supabase = await createSupabaseServerClient();
+  const user = await getAuthUser();
 
   const { data: post, error } = await supabase
     .from("posts")
@@ -40,7 +67,12 @@ export default async function PostDetailsPage({
     <PageLayout>
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">{post.item_name}</h1>
-        <Badge>{post.type}</Badge>
+        <div className="flex items-center gap-2">
+          <Badge variant={post.status === "Active" ? "secondary" : "outline"}>
+            {post.status ?? "Active"}
+          </Badge>
+          <Badge>{post.type}</Badge>
+        </div>
       </div>
       <section className="flex gap-4">
         <main className="w-full space-y-4">
@@ -105,6 +137,82 @@ export default async function PostDetailsPage({
               <CardDescription>{post.description}</CardDescription>
             </CardHeader>
           </Card>
+          {post.user_id === user.id && (
+            <Card className="rounded-sm">
+              <CardHeader>
+                <CardTitle>Manage post</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="grid grid-cols-2 items-start gap-3">
+                  <details>
+                    <summary className="flex h-9 w-full cursor-pointer list-none items-center justify-center rounded-md bg-black px-2.5 text-sm font-medium text-white hover:bg-gray-800">
+                      Edit post
+                    </summary>
+                    <form action={updatePost} className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
+                      <input type="hidden" name="postId" value={post.id} />
+                      <label className="grid gap-1 text-sm">
+                        Item name
+                        <Input name="itemName" defaultValue={post.item_name} required />
+                      </label>
+                      <label className="grid gap-1 text-sm">
+                        Category
+                        <Select name="category" defaultValue={post.category} required>
+                          <SelectTrigger className="w-full">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent
+                            side="bottom"
+                            collisionAvoidance={{
+                              side: "shift",
+                              align: "shift",
+                              fallbackAxisSide: "none",
+                            }}
+                          >
+                            <SelectGroup>
+                              {categories.map(([label, value]) => (
+                                <SelectItem key={value} value={value}>
+                                  {label}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </label>
+                      <label className="grid gap-1 text-sm">
+                        Date
+                        <Input type="date" name="date" defaultValue={post.date} required />
+                      </label>
+                      <label className="grid gap-1 text-sm">
+                        Location
+                        <Input name="location" defaultValue={post.location} required />
+                      </label>
+                      <label className="grid gap-1 text-sm md:col-span-2">
+                        Description
+                        <Textarea name="description" defaultValue={post.description} required />
+                      </label>
+                      <label className="grid gap-1 text-sm md:col-span-2">
+                        Replace image
+                        <Input
+                          type="file"
+                          name="image"
+                          accept="image/jpeg,image/png"
+                        />
+                      </label>
+                      <Button type="submit" className="w-fit md:col-span-2">
+                        Save changes
+                      </Button>
+                    </form>
+                  </details>
+                  <form action={deletePost}>
+                    <input type="hidden" name="postId" value={post.id} />
+                    <Button type="submit" variant="destructive" className="w-full">
+                      Delete post
+                    </Button>
+                  </form>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </main>
         <div className="w-100 p-4 h-fit border border-primary/20 rounded-sm space-y-6">
           <div className="space-y-2">
