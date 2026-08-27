@@ -77,6 +77,99 @@ export async function createPost(
   redirect("/posts/my-posts");
 }
 
+export async function updatePost(formData: FormData) {
+  const supabase = await createSupabaseServerClient();
+  const user = await getAuthUser();
+  const postId = formData.get("postId");
+  const itemName = formData.get("itemName");
+  const category = formData.get("category");
+  const date = formData.get("date");
+  const location = formData.get("location");
+  const description = formData.get("description");
+  const imageFile = formData.get("image");
+
+  if (
+    typeof postId !== "string" ||
+    typeof itemName !== "string" ||
+    typeof category !== "string" ||
+    typeof date !== "string" ||
+    typeof location !== "string" ||
+    typeof description !== "string" ||
+    !itemName ||
+    !category ||
+    !date ||
+    !location ||
+    !description
+  ) {
+    throw new Error("All required fields must be filled");
+  }
+
+  const updates: {
+    item_name: string;
+    category: string;
+    date: string;
+    location: string;
+    description: string;
+    image_url?: string;
+  } = { item_name: itemName, category, date, location, description };
+
+  if (imageFile instanceof File && imageFile.size > 0) {
+    if (imageFile.size > MAX_FILE_SIZE) {
+      throw new Error("Image file is must be less than 10MB");
+    }
+    if (!ALLOWED_TYPES.includes(imageFile.type)) {
+      throw new Error("Only JPEG/JPG/PNG are allowed");
+    }
+
+    const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}-${imageFile.name}`;
+    const filePath = `updates/${user.id}/${filename}`;
+    const { error: uploadError } = await supabase.storage
+      .from("posts")
+      .upload(filePath, imageFile);
+
+    if (uploadError) {
+      throw new Error(uploadError.message);
+    }
+
+    const { data } = supabase.storage.from("posts").getPublicUrl(filePath);
+    updates.image_url = data.publicUrl;
+  }
+
+  const { error } = await supabase
+    .from("posts")
+    .update(updates)
+    .eq("id", postId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  redirect(`/posts/${postId}`);
+}
+
+export async function deletePost(formData: FormData) {
+  const supabase = await createSupabaseServerClient();
+  const user = await getAuthUser();
+  const postId = formData.get("postId");
+
+  if (typeof postId !== "string" || !postId) {
+    throw new Error("Post could not be identified");
+  }
+
+  const { error } = await supabase
+    .from("posts")
+    .delete()
+    .eq("id", postId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  redirect("/posts/my-posts");
+}
+
 export async function getUserPosts(type?: PostType) {
   const supabase = await createSupabaseServerClient();
   const user = await getAuthUser();
