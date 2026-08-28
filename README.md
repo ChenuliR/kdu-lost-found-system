@@ -18,7 +18,7 @@ Features
 
 The interactive Figma prototype contains the project's wireframes, screen navigation and prototype connections.
 
-Open Interactive Figma Prototype (**https://www.figma.com/design/twmjJIY5tbbBWooZ7VtaoJ/Lost-Found-System?node-id=0-1\&t=GEB1PUjSMjs35gcS-1**)
+Open Interactive Figma Prototype (**https://www.figma.com/design/twmjJIY5tbbBWooZ7VtaoJ/Lost-Found-System?node-id=17-2&p=f&t=iiUbdKl7rfWJNsQT-0**)
 
 ###### Wireframe Documentation
 
