@@ -13,14 +13,11 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { getSupabaseBrowserClient } from "@/lib/supabase/browser-client";
 import { User } from "@supabase/supabase-js";
-import { Box, ChevronsUpDown, CircleUser, Compass, ImageIcon } from "lucide-react";
+import { Box, Compass, ImageIcon } from "lucide-react";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { NavUser } from "./nav-user";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 const data = {
   navMain: [
@@ -51,9 +48,7 @@ type AuthUser = {
   user: User | null;
 };
 
-export default function AppSidebar(
-  { user }: AuthUser,
-) {
+export default function AppSidebar({ user }: AuthUser) {
   const pathname = usePathname();
 
   return (
