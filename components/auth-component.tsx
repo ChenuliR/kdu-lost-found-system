@@ -102,7 +102,7 @@ export default function AuthComponent() {
             src={"/logo.svg"}
             alt="logo"
             width={46}
-            height={40}
+            height={46}
             className="rounded-xs"
           />
         </div>

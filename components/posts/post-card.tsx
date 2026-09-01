@@ -27,7 +27,7 @@ export default function PostCard({ post }: { post: any }) {
       {/* Content */}
       <div className="p-4 space-y-3">
         {/* Title */}
-        <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center justify-between gap-3">
           <h3 className="font-semibold text-lg">{post.item_name}</h3>
           <Badge
             variant={post.status === "Active" ? "secondary" : "outline"}
