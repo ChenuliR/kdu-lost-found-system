@@ -149,8 +149,8 @@ export default function PostDetail({ post, user }: { post: any; user: User }) {
                       }}
                       className={`flex h-9 w-full list-none items-center justify-center rounded-md px-2.5 text-sm font-medium transition-colors ${
                         isPending
-                          ? "cursor-not-allowed bg-black/50 text-white/70"
-                          : "cursor-pointer bg-black text-white hover:bg-gray-800"
+                          ? "cursor-not-allowed bg-primary text-primary-foreground"
+                          : "cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90"
                       }`}
                     >
                       Edit post
