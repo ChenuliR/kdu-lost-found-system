@@ -336,7 +336,7 @@ export default function PostForm({ postType }: { postType: PostType }) {
                         <img
                           src={photoPreview}
                           alt="Preview"
-                          className="max-h-48 rounded-lg object-cover pointer-events-none"
+                          className="max-h-48 rounded-lg object-cover"
                         />
                         <Button
                           type="button"
@@ -366,7 +366,7 @@ export default function PostForm({ postType }: { postType: PostType }) {
                       />
                       <label
                         htmlFor="file-input"
-                        className="cursor-pointer pointer-events-none"
+                        className="cursor-pointer"
                       >
                         <div className="flex flex-col items-center gap-2">
                           <ImageUp
