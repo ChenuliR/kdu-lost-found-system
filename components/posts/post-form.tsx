@@ -326,8 +326,8 @@ export default function PostForm({ postType }: { postType: PostType }) {
                   onDrop={handleDrop}
                   className={`rounded-lg border-2 border-dashed p-8 text-center transition-colors ${
                     dragActive
-                      ? "border-blue-500 bg-blue-50"
-                      : "border-gray-300 bg-gray-50"
+                      ? "border-blue-500/90 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/40"
+                      : "border-muted-foreground/20 bg-muted-foreground/5"
                   } ${isLoading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
                 >
                   {photoPreview ? (
@@ -364,20 +364,17 @@ export default function PostForm({ postType }: { postType: PostType }) {
                         id="file-input"
                         disabled={isLoading}
                       />
-                      <label
-                        htmlFor="file-input"
-                        className="cursor-pointer"
-                      >
+                      <label htmlFor="file-input" className="cursor-pointer">
                         <div className="flex flex-col items-center gap-2">
                           <ImageUp
                             size={60}
-                            className="text-gray-400"
+                            className="text-secondary-foreground/40"
                             strokeWidth={1.2}
                           />
-                          <p className="text-sm font-medium text-gray-700">
+                          <p className="text-sm font-medium text-secondary-foreground/60">
                             Click to upload or drag and drop
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-secondary-foreground/40">
                             JPEG, JPG, PNG up to 10MB
                           </p>
                         </div>
@@ -410,7 +407,7 @@ export default function PostForm({ postType }: { postType: PostType }) {
               disabled={isLoading}
               className="cursor-pointer"
               nativeButton={false}
-             render={<Link href={"/posts/my-posts"} replace />}
+              render={<Link href={"/posts/my-posts"} replace />}
             >
               Cancel
             </Button>

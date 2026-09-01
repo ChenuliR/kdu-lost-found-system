@@ -94,10 +94,7 @@ export default function AdminDashboardPage() {
     );
   };
 
-  const updateClaimStatus = (
-    claimId: number,
-    status: Claim["status"],
-  ) => {
+  const updateClaimStatus = (claimId: number, status: Claim["status"]) => {
     setClaims((currentClaims) =>
       currentClaims.map((claim) =>
         claim.id === claimId ? { ...claim, status } : claim,
@@ -122,7 +119,9 @@ export default function AdminDashboardPage() {
             >
               <ArrowLeft />
             </Button>
-            <span className="font-semibold text-foreground">Campus L&amp;F</span>
+            <span className="font-semibold text-foreground">
+              Campus L&amp;F
+            </span>
             <span className="hidden sm:inline">/ Administration</span>
           </div>
           <div className="flex items-center gap-2">
@@ -146,7 +145,10 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        <section className="grid gap-4 md:grid-cols-3" aria-label="Dashboard summary">
+        <section
+          className="grid gap-4 md:grid-cols-3"
+          aria-label="Dashboard summary"
+        >
           <MetricCard
             label="Active Posts"
             value="1,284"
@@ -227,7 +229,9 @@ export default function AdminDashboardPage() {
                           </Button>
                           <Button
                             size="sm"
-                            onClick={() => updateClaimStatus(claim.id, "Claimed")}
+                            onClick={() =>
+                              updateClaimStatus(claim.id, "Claimed")
+                            }
                           >
                             <Check />
                             Approve
@@ -252,7 +256,11 @@ export default function AdminDashboardPage() {
           <Card>
             <CardHeader className="flex-row items-center justify-between border-b">
               <CardTitle>Post Moderation</CardTitle>
-              <Button variant="ghost" size="icon-sm" aria-label="More moderation options">
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                aria-label="More moderation options"
+              >
                 <MoreVertical />
               </Button>
             </CardHeader>
@@ -260,7 +268,10 @@ export default function AdminDashboardPage() {
               {flaggedPosts
                 .filter((post) => !removedPosts.includes(post.item))
                 .map((post) => (
-                  <div key={post.item} className="rounded-lg border bg-muted/20 p-3">
+                  <div
+                    key={post.item}
+                    className="rounded-lg border bg-muted/20 p-3"
+                  >
                     <div className="flex items-start justify-between gap-3">
                       <p className="text-sm font-semibold">{post.item}</p>
                       <Button
@@ -277,23 +288,31 @@ export default function AdminDashboardPage() {
                     <p
                       className={`mt-2 flex items-center gap-1 text-xs font-medium ${post.alert ? "text-destructive" : "text-muted-foreground"}`}
                     >
-                      {post.alert ? <CircleAlert /> : <span className="size-1.5 rounded-full bg-muted-foreground" />}
+                      {post.alert ? (
+                        <CircleAlert />
+                      ) : (
+                        <span className="size-1.5 rounded-full bg-muted-foreground" />
+                      )}
                       Flagged: {post.reason}
                     </p>
-                    <p className="mt-1 text-xs text-muted-foreground">{post.detail}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      {post.detail}
+                    </p>
                   </div>
                 ))}
               {removedPosts.length === flaggedPosts.length && (
                 <EmptyState message="No flagged posts remain." />
               )}
-              <Button variant="ghost" className="mt-1 w-full justify-center text-sm">
+              <Button
+                variant="ghost"
+                className="mt-1 w-full justify-center text-sm"
+              >
                 View All Flagged Posts
                 <ArrowRight />
               </Button>
             </CardContent>
           </Card>
         </div>
-
       </div>
     </PageLayout>
   );
@@ -322,7 +341,9 @@ function MetricCard({
           <p className="mt-3 text-3xl font-bold tracking-tight">{value}</p>
           <p className="mt-1 text-xs text-muted-foreground">{detail}</p>
         </div>
-        <span className="rounded-md bg-background/80 p-2 text-muted-foreground">{icon}</span>
+        <span className="rounded-md bg-background/80 p-2 text-muted-foreground">
+          {icon}
+        </span>
       </CardContent>
     </Card>
   );

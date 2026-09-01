@@ -1,3 +1,5 @@
+import { ModeToggle } from "@/components/mode-toggle";
+import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
@@ -36,7 +38,17 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <main className="relative">
+            <ModeToggle />
+            {children}
+          </main>
+        </ThemeProvider>
         <Toaster />
       </body>
     </html>

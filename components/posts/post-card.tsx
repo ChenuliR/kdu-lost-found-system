@@ -5,7 +5,7 @@ import { Badge } from "../ui/badge";
 
 export default function PostCard({ post }: { post: any }) {
   return (
-    <div className="bg-white rounded-sm shadow overflow-hidden hover:shadow-lg transition-shadow">
+    <div className="dark:bg-muted-foreground/10 dark:hover:bg-muted-foreground/15 rounded-sm shadow overflow-hidden hover:shadow-lg transition-all border-2 border-primary-foreground">
       {/* Image Container */}
       <div className="relative w-full h-64 bg-gray-200">
         {post.image_url ? (
@@ -38,17 +38,24 @@ export default function PostCard({ post }: { post: any }) {
         </div>
 
         {/* Description */}
-        <p className="text-gray-600 text-sm line-clamp-2">{post.description}</p>
+        <p className="text-primary/80 text-sm line-clamp-2">
+          {post.description}
+        </p>
 
         <Separator />
 
         {/* Meta Info */}
-        <div className="flex items-center justify-between text-xs text-gray-500">
+        <div className="flex items-center justify-between text-xs text-primary/70">
           <span className="flex items-center gap-1">
             <Calendar size={14} />
             {new Date(post.date).toLocaleDateString()}
           </span>
-          <Badge variant={"outline"}>{post.category}</Badge>
+          <Badge
+            variant={"outline"}
+            className="text-primary/70 border-primary-background"
+          >
+            {post.category}
+          </Badge>
         </div>
       </div>
     </div>
