@@ -27,7 +27,6 @@ export const createSupabaseServerClient = async () => {
             cookieStore.set(name, value, options),
           );
         } catch (error) {
-          console.error(error);
         }
       },
     },

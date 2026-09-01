@@ -1,10 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { Button } from "../ui/button";
-import PostCard from "./post-card";
+import { Filter, Plus } from "lucide-react";
 import Link from "next/link";
-import { Filter, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Button } from "../ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import PostCard from "./post-card";
 
 const CATEGORIES = [
   { label: "Select a category", value: null },
@@ -24,29 +29,42 @@ const CATEGORIES = [
 ];
 
 export default function PostFilter({ posts }: { posts: any[] }) {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-
-  // search
+  // Search state
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [displayedPosts, setDisplayedPosts] = useState<any[]>(posts ?? []);
 
-  // active filters (applied when popup closes)
+  // Active filters (applied when popup closes/applies)
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
   const [startDateFilter, setStartDateFilter] = useState<string>("");
   const [endDateFilter, setEndDateFilter] = useState<string>("");
 
-  // popup state and temporary values
+  // Popup state and temporary values
   const [popupOpen, setPopupOpen] = useState(false);
   const [tempType, setTempType] = useState<string>(typeFilter);
-  const [tempCategory, setTempCategory] = useState<string | null>(categoryFilter);
+  const [tempCategory, setTempCategory] = useState<string | null>(
+    categoryFilter,
+  );
   const [tempStart, setTempStart] = useState<string>(startDateFilter);
   const [tempEnd, setTempEnd] = useState<string>(endDateFilter);
+  const [filterApplied, setFilterApplied] = useState<boolean>(false);
 
-  useEffect(() => setDisplayedPosts(posts ?? []), [posts]);
+  useEffect(() => {
+    setDisplayedPosts(posts ?? []);
+  }, [posts]);
 
-  // apply active filters + query (debounced)
+  // Synchronize temporary states whenever the popup is opened
+  useEffect(() => {
+    if (popupOpen) {
+      setTempType(typeFilter);
+      setTempCategory(categoryFilter);
+      setTempStart(startDateFilter);
+      setTempEnd(endDateFilter);
+    }
+  }, [popupOpen, typeFilter, categoryFilter, startDateFilter, endDateFilter]);
+
+  // Apply active filters + search query (debounced)
   useEffect(() => {
     let mounted = true;
     setLoading(true);
@@ -54,11 +72,19 @@ export default function PostFilter({ posts }: { posts: any[] }) {
       if (!mounted) return;
       const term = query.trim().toLowerCase();
       const filtered = (posts || []).filter((post) => {
-        // type
+        // Type filter
         if (typeFilter !== "all" && post.type !== typeFilter) return false;
-        // category
-        if (categoryFilter && categoryFilter !== "all" && post.category !== categoryFilter) return false;
-        // date range
+
+        // Category filter
+        if (
+          categoryFilter &&
+          categoryFilter !== "all" &&
+          post.category !== categoryFilter
+        ) {
+          return false;
+        }
+
+        // Date range filter
         if (startDateFilter) {
           const d = new Date(post.date || post.created_at || "");
           if (isNaN(d.getTime())) return false;
@@ -69,13 +95,15 @@ export default function PostFilter({ posts }: { posts: any[] }) {
           if (isNaN(d.getTime())) return false;
           if (d > new Date(endDateFilter)) return false;
         }
-        // query
+
+        // Search query filter
         if (term) {
           const name = (post.item_name || "").toLowerCase();
           if (!name.includes(term)) return false;
         }
         return true;
       });
+
       setDisplayedPosts(filtered);
       setLoading(false);
     }, 250);
@@ -84,16 +112,14 @@ export default function PostFilter({ posts }: { posts: any[] }) {
       mounted = false;
       clearTimeout(timer);
     };
-  }, [query, typeFilter, categoryFilter, startDateFilter, endDateFilter, posts]);
-
-  // open popup -> initialize temps
-  const openPopup = () => {
-    setTempType(typeFilter);
-    setTempCategory(categoryFilter);
-    setTempStart(startDateFilter);
-    setTempEnd(endDateFilter);
-    setPopupOpen(true);
-  };
+  }, [
+    query,
+    typeFilter,
+    categoryFilter,
+    startDateFilter,
+    endDateFilter,
+    posts,
+  ]);
 
   const closePopupApply = () => {
     setTypeFilter(tempType);
@@ -101,6 +127,17 @@ export default function PostFilter({ posts }: { posts: any[] }) {
     setStartDateFilter(tempStart);
     setEndDateFilter(tempEnd);
     setPopupOpen(false);
+
+    if (
+      tempType !== "all" ||
+      tempCategory !== null ||
+      tempStart !== "" ||
+      tempEnd !== ""
+    ) {
+      setFilterApplied(true);
+    } else {
+      setFilterApplied(false);
+    }
   };
 
   const clearTempFilters = () => {
@@ -110,132 +147,135 @@ export default function PostFilter({ posts }: { posts: any[] }) {
     setTempEnd("");
   };
 
-  // clicking outside closes popup and applies
-  useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (!popupOpen) return;
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        closePopupApply();
-      }
-    }
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, [popupOpen, tempType, tempCategory, tempStart, tempEnd]);
-
-  const applyNow = () => {
-    setLoading(true);
-    setTimeout(() => setLoading(false), 150);
-  };
-
   return (
-    <div ref={containerRef} className="relative">
-      <div className="flex items-center gap-2 mb-4">
-        <input
-          aria-label="Search posts"
-          placeholder="Search by item name"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="flex-1 rounded-sm border px-3 py-2"
-        />
+    <div className="relative">
+      <div className="flex justify-between items-center mb-8">
+        <div className="flex items-center gap-2">
+          <input
+            aria-label="Search posts"
+            placeholder="Search by item name"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="w-2xl rounded-sm border px-3 py-2 text-sm"
+          />
 
-        <button
-          aria-label="Open filters"
-          onClick={openPopup}
-          className="inline-flex items-center justify-center rounded border px-2 py-2 cursor-pointer"
-        >
-          <Filter />
-        </button>
+          <DropdownMenu open={popupOpen} onOpenChange={setPopupOpen}>
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  variant="outline"
+                  size="icon"
+                  aria-label="Open filters"
+                  className="relative inline-flex items-center justify-center rounded border px-2 py-2 cursor-pointer"
+                >
+                  <Filter />
+                  {filterApplied && (
+                    <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-red-500" />
+                  )}
+                </Button>
+              }
+            />
+            <DropdownMenuContent className="w-80 p-4">
+              <div className="space-y-4">
+                <label className="block text-sm">
+                  Type
+                  <select
+                    className="mt-2 w-full rounded border px-2 py-1"
+                    value={tempType}
+                    onChange={(e) => setTempType(e.target.value)}
+                  >
+                    <option value="all">All</option>
+                    <option value="lost">Lost</option>
+                    <option value="found">Found</option>
+                  </select>
+                </label>
 
-        <Button onClick={applyNow} className="shrink-0 cursor-pointer">
-          Search
-        </Button>
-      </div>
+                <label className="block text-sm">
+                  Category
+                  <select
+                    className="mt-2 w-full rounded border px-2 py-1"
+                    value={tempCategory ?? "null"}
+                    onChange={(e) =>
+                      setTempCategory(
+                        e.target.value === "null" ? null : e.target.value,
+                      )
+                    }
+                  >
+                    {CATEGORIES.map((c) => (
+                      <option key={String(c.value)} value={c.value ?? "null"}>
+                        {c.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
 
-      {popupOpen && (
-        <div className="absolute right-0 z-50 mt-2 w-80 rounded-lg border bg-white p-4 shadow-lg">
-          <div className="flex items-start justify-between">
-            <h3 className="text-sm font-medium">Filters</h3>
-            <button
-              aria-label="Close filters"
-              onClick={() => setPopupOpen(false)}
-              className="p-1"
-            >
-              <X />
-            </button>
-          </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <label className="block text-sm">
+                    From
+                    <input
+                      type="date"
+                      className="mt-2 w-full rounded border px-2 py-1"
+                      value={tempStart}
+                      onChange={(e) => setTempStart(e.target.value)}
+                    />
+                  </label>
+                  <label className="block text-sm">
+                    To
+                    <input
+                      type="date"
+                      className="mt-2 w-full rounded border px-2 py-1"
+                      value={tempEnd}
+                      onChange={(e) => setTempEnd(e.target.value)}
+                    />
+                  </label>
+                </div>
 
-          <div className="mt-3 space-y-3">
-            <label className="block text-sm">
-              Type
-              <select
-                className="mt-1 w-full rounded border px-2 py-1"
-                value={tempType}
-                onChange={(e) => setTempType(e.target.value)}
-              >
-                <option value="all">All</option>
-                <option value="lost">Lost</option>
-                <option value="found">Found</option>
-              </select>
-            </label>
-
-            <label className="block text-sm">
-              Category
-              <select
-                className="mt-1 w-full rounded border px-2 py-1"
-                value={tempCategory ?? "null"}
-                onChange={(e) => setTempCategory(e.target.value === "null" ? null : e.target.value)}
-              >
-                {CATEGORIES.map((c) => (
-                  <option key={String(c.value)} value={c.value ?? "null"}>
-                    {c.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <div className="grid grid-cols-2 gap-2">
-              <label className="block text-sm">
-                From
-                <input
-                  type="date"
-                  className="mt-1 w-full rounded border px-2 py-1"
-                  value={tempStart}
-                  onChange={(e) => setTempStart(e.target.value)}
-                />
-              </label>
-              <label className="block text-sm">
-                To
-                <input
-                  type="date"
-                  className="mt-1 w-full rounded border px-2 py-1"
-                  value={tempEnd}
-                  onChange={(e) => setTempEnd(e.target.value)}
-                />
-              </label>
-            </div>
-
-            <div className="flex justify-between items-center">
-              <Button variant="outline" onClick={clearTempFilters}>
-                Clear
-              </Button>
-              <div>
-                <Button onClick={closePopupApply}>Apply</Button>
+                <div className="flex justify-between items-center">
+                  <Button variant="outline" onClick={clearTempFilters}>
+                    Clear
+                  </Button>
+                  <Button onClick={closePopupApply}>Apply</Button>
+                </div>
               </div>
-            </div>
-          </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
-      )}
+
+        <Link href="/posts/new">
+          <Button className="cursor-pointer">
+            <Plus />
+            <span>Create Post</span>
+          </Button>
+        </Link>
+      </div>
 
       {loading ? (
         <div className="h-30 flex items-center justify-center">
-          <svg className="h-6 w-6 animate-spin text-muted-foreground" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+          <svg
+            className="h-6 w-6 animate-spin text-muted-foreground"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
+              fill="none"
+            />
+            <path
+              className="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+            />
           </svg>
         </div>
       ) : displayedPosts.length === 0 ? (
         <div className="h-30 flex flex-col items-center justify-center">
-          <p className="text-muted-foreground text-sm">No items found matching your search.</p>
+          <p className="text-muted-foreground text-sm">
+            No items found matching your search.
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
