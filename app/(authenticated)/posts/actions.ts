@@ -191,3 +191,24 @@ export async function getUserPosts(type?: PostType) {
 
   return posts;
 }
+
+export async function getAllPosts(type?: PostType) {
+  const supabase = await createSupabaseServerClient();
+
+  let query = supabase.from("posts").select("*");
+
+  // Filter if type specified
+  if (type) {
+    query = query.eq("type", type);
+  }
+
+  const { data: posts, error } = await query.order("created_at", {
+    ascending: false,
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return posts;
+}

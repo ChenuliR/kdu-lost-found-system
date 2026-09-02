@@ -231,10 +231,16 @@ export default function PostFilter({ posts }: { posts: any[] }) {
                 </div>
 
                 <div className="flex justify-between items-center">
-                  <Button variant="outline" onClick={clearTempFilters}>
+                  <Button
+                    variant="outline"
+                    onClick={clearTempFilters}
+                    className="cursor-pointer"
+                  >
                     Clear
                   </Button>
-                  <Button onClick={closePopupApply}>Apply</Button>
+                  <Button onClick={closePopupApply} className="cursor-pointer">
+                    Apply
+                  </Button>
                 </div>
               </div>
             </DropdownMenuContent>
