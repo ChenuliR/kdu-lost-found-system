@@ -83,6 +83,33 @@ export async function getAdminClaims() {
   });
 }
 
+export async function getUserClaims() {
+  const supabase = await createSupabaseServerClient();
+  const user = await getAuthUser();
+
+  const { data, error } = await supabase
+    .from("claims")
+    .select("id, status, created_at, posts(item_name, image_url)")
+    .eq("claimant_id", user.id)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return (data ?? []).map((claim) => {
+    const post = Array.isArray(claim.posts) ? claim.posts[0] : claim.posts;
+
+    return {
+      id: claim.id,
+      itemName: post?.item_name ?? "Unknown item",
+      imageUrl: post?.image_url ?? null,
+      status: claim.status as ClaimStatus,
+      createdAt: claim.created_at,
+    };
+  });
+}
+
 export async function updateClaimStatus(formData: FormData) {
   const supabase = await createSupabaseServerClient();
   const user = await getAuthUser();
