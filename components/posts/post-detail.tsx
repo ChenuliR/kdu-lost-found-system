@@ -1,6 +1,7 @@
 "use client";
 
 import { updatePost } from "@/app/(authenticated)/posts/actions";
+import { submitClaim } from "@/app/(authenticated)/claims/actions";
 import DeleteModal from "@/components/delete-modal";
 import ImageModal from "@/components/image-modal";
 import { Badge } from "@/components/ui/badge";
@@ -257,35 +258,40 @@ export default function PostDetail({ post, user }: { post: any; user: User }) {
               If this is your item, provide specific details to prove ownership.
             </p>
           </div>
-          <FieldSet>
-            <FieldGroup>
-              <Field>
-                <FieldLabel htmlFor="description">
-                  Details proving ownership
-                </FieldLabel>
-                <Textarea
-                  id="description"
-                  placeholder="The serial number is C02x-322..., the wallpaper is a picture of..."
-                  className="resize-none rounded-sm"
-                  required
-                />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="contact-info">
-                  Contact Information
-                </FieldLabel>
-                <Input
-                  id="contact-info"
-                  placeholder="Email or Phone Number"
-                  required
-                />
-              </Field>
-            </FieldGroup>
-          </FieldSet>
-          <Button className="w-full rounded-sm cursor-pointer">
-            <Send data-icon="inline-start" />
-            Submit Claim
-          </Button>
+          <form action={submitClaim} className="space-y-6">
+            <input type="hidden" name="postId" value={post.id} />
+            <FieldSet>
+              <FieldGroup>
+                <Field>
+                  <FieldLabel htmlFor="proof-details">
+                    Details proving ownership
+                  </FieldLabel>
+                  <Textarea
+                    id="proof-details"
+                    name="proofDetails"
+                    placeholder="The serial number is C02x-322..., the wallpaper is a picture of..."
+                    className="resize-none rounded-sm"
+                    required
+                  />
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="contact-info">
+                    Contact Information
+                  </FieldLabel>
+                  <Input
+                    id="contact-info"
+                    name="contactInfo"
+                    placeholder="Email or Phone Number"
+                    required
+                  />
+                </Field>
+              </FieldGroup>
+            </FieldSet>
+            <Button type="submit" className="w-full rounded-sm cursor-pointer">
+              <Send data-icon="inline-start" />
+              Submit Claim
+            </Button>
+          </form>
         </div>
       </section>
     </>

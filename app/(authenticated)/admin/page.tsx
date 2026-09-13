@@ -1,5 +1,5 @@
-"use client";
-
+import { getAdminClaims, updateClaimStatus } from "@/app/(authenticated)/claims/actions";
+import AdminModeration from "@/components/admin-moderation";
 import PageLayout from "@/components/page-layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,47 +21,14 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
 
 type Claim = {
-  id: number;
+  id: string;
   item: string;
   claimant: string;
-  age: string;
-  tone: string;
-  initials: string;
-  status: "Active" | "Claimed" | "Closed";
+  status: "Pending" | "Approved" | "Rejected";
+  createdAt: string;
 };
-
-const initialClaims: Claim[] = [
-  {
-    id: 1,
-    item: "Black Leather Wallet",
-    claimant: "Sarah Jean Jenkins",
-    age: "2 hours ago",
-    tone: "bg-amber-100 text-amber-900",
-    initials: "BW",
-    status: "Active",
-  },
-  {
-    id: 2,
-    item: "AirPods Pro (2nd Gen)",
-    claimant: "Michael Chang",
-    age: "5 hours ago",
-    tone: "bg-slate-200 text-slate-700",
-    initials: "AP",
-    status: "Active",
-  },
-  {
-    id: 3,
-    item: "Set of Dorm Keys (Room 402)",
-    claimant: "Elena Rodriguez",
-    age: "1 day ago",
-    tone: "bg-muted text-muted-foreground",
-    initials: "K",
-    status: "Active",
-  },
-];
 
 const flaggedPosts = [
   {
@@ -84,23 +51,8 @@ const flaggedPosts = [
   },
 ];
 
-export default function AdminDashboardPage() {
-  const [claims, setClaims] = useState(initialClaims);
-  const [removedPosts, setRemovedPosts] = useState<string[]>([]);
-
-  const dismissClaim = (claimId: number) => {
-    setClaims((currentClaims) =>
-      currentClaims.filter((claim) => claim.id !== claimId),
-    );
-  };
-
-  const updateClaimStatus = (claimId: number, status: Claim["status"]) => {
-    setClaims((currentClaims) =>
-      currentClaims.map((claim) =>
-        claim.id === claimId ? { ...claim, status } : claim,
-      ),
-    );
-  };
+export default async function AdminDashboardPage() {
+  const claims = (await getAdminClaims()) as Claim[];
 
   return (
     <PageLayout
@@ -193,58 +145,47 @@ export default function AdminDashboardPage() {
                     className="flex flex-col gap-4 border-b p-4 last:border-b-0 sm:flex-row sm:items-center sm:justify-between"
                   >
                     <div className="flex min-w-0 items-center gap-3">
-                      <div
-                        className={`flex size-11 shrink-0 items-center justify-center rounded-md text-xs font-bold ${claim.tone}`}
-                      >
-                        {claim.initials}
+                      <div className="flex size-11 shrink-0 items-center justify-center rounded-md bg-muted text-xs font-bold text-muted-foreground">
+                        {claim.item.slice(0, 2).toUpperCase()}
                       </div>
                       <div className="min-w-0">
                         <p className="truncate font-medium">{claim.item}</p>
                         <p className="text-sm text-muted-foreground">
-                          Claimed by {claim.claimant} • {claim.age}
+                          Claimed by {claim.claimant.slice(0, 8)} • {new Date(claim.createdAt).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
                     <div className="flex shrink-0 items-center gap-2 sm:pl-4">
                       <span
                         className={`rounded-full px-2.5 py-1 text-xs font-medium ${
-                          claim.status === "Claimed"
+                          claim.status === "Approved"
                             ? "bg-emerald-100 text-emerald-800"
-                            : claim.status === "Closed"
+                            : claim.status === "Rejected"
                               ? "bg-slate-200 text-slate-700"
                               : "bg-amber-100 text-amber-800"
                         }`}
                       >
                         {claim.status}
                       </span>
-                      {claim.status === "Active" ? (
+                      {claim.status === "Pending" ? (
                         <>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => dismissClaim(claim.id)}
-                          >
-                            <X />
-                            Reject
-                          </Button>
-                          <Button
-                            size="sm"
-                            onClick={() =>
-                              updateClaimStatus(claim.id, "Claimed")
-                            }
-                          >
-                            <Check />
-                            Approve
-                          </Button>
+                          <form action={updateClaimStatus}>
+                            <input type="hidden" name="claimId" value={claim.id} />
+                            <input type="hidden" name="status" value="Rejected" />
+                            <Button variant="outline" size="sm">
+                              <X />
+                              Reject
+                            </Button>
+                          </form>
+                          <form action={updateClaimStatus}>
+                            <input type="hidden" name="claimId" value={claim.id} />
+                            <input type="hidden" name="status" value="Approved" />
+                            <Button size="sm">
+                              <Check />
+                              Approve
+                            </Button>
+                          </form>
                         </>
-                      ) : claim.status === "Claimed" ? (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => updateClaimStatus(claim.id, "Closed")}
-                        >
-                          Close post
-                        </Button>
                       ) : null}
                     </div>
                   </div>
@@ -253,65 +194,7 @@ export default function AdminDashboardPage() {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="flex-row items-center justify-between border-b">
-              <CardTitle>Post Moderation</CardTitle>
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                aria-label="More moderation options"
-              >
-                <MoreVertical />
-              </Button>
-            </CardHeader>
-            <CardContent className="gap-3 p-4">
-              {flaggedPosts
-                .filter((post) => !removedPosts.includes(post.item))
-                .map((post) => (
-                  <div
-                    key={post.item}
-                    className="rounded-lg border bg-muted/20 p-3"
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <p className="text-sm font-semibold">{post.item}</p>
-                      <Button
-                        variant="ghost"
-                        size="icon-xs"
-                        aria-label={`Remove ${post.item}`}
-                        onClick={() =>
-                          setRemovedPosts((current) => [...current, post.item])
-                        }
-                      >
-                        <Trash2 />
-                      </Button>
-                    </div>
-                    <p
-                      className={`mt-2 flex items-center gap-1 text-xs font-medium ${post.alert ? "text-destructive" : "text-muted-foreground"}`}
-                    >
-                      {post.alert ? (
-                        <CircleAlert />
-                      ) : (
-                        <span className="size-1.5 rounded-full bg-muted-foreground" />
-                      )}
-                      Flagged: {post.reason}
-                    </p>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      {post.detail}
-                    </p>
-                  </div>
-                ))}
-              {removedPosts.length === flaggedPosts.length && (
-                <EmptyState message="No flagged posts remain." />
-              )}
-              <Button
-                variant="ghost"
-                className="mt-1 w-full justify-center text-sm"
-              >
-                View All Flagged Posts
-                <ArrowRight />
-              </Button>
-            </CardContent>
-          </Card>
+          <AdminModeration />
         </div>
       </div>
     </PageLayout>
