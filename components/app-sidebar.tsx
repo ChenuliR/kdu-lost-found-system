@@ -36,7 +36,7 @@ const data = {
         },
         {
           title: "My Claims",
-          url: "",
+          url: "/claims",
           icon: Box,
         },
       ],
