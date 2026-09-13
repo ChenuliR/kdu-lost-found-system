@@ -380,6 +380,162 @@ The completed Sprint 2 functionality provides the core foundation required for t
 
 ---
 
+## Sprint 3: Claim Management & Integration
+
+**Sprint Duration:** Week 4-5 (August 25 – September 8 , 2026)
+
+**Sprint Goal:** Implement and integrate the core Claim Management workflow and respond to client feedback from Milestone 1.
+
+---
+
+### Key Activities
+
+#### 1. Sprint 3 Planning
+
+Sprint 3 began with a review of the Claim Management requirements and the remaining work from the previous sprint.
+
+The following User Stories were planned for Sprint 3:
+
+- **US-12:** Submit Claim Request — 5 points
+- **US-13:** Track Claim Status — 3 points
+- **US-14:** Receive Claim Notifications — 5 points
+- **US-15:** Review Claim Requests — 5 points
+
+**Total Planned Story Points: 18**
+
+**Sprint Goal:**
+
+> "Implement and integrate the core Claim Management workflow and respond to client feedback from Milestone 1."
+
+---
+
+#### 2. Planned Claim Management Development
+
+The main development activities planned for Sprint 3 were:
+
+- Implement claim submission for Found Items.
+- Allow users to track their claim status.
+- Implement claim status notifications.
+- Allow administrators to review and approve/reject claims.
+- Integrate claims with existing Found Item posts.
+- Integrate claim information with the existing database.
+- Address client feedback received during Milestone 1.
+
+---
+
+#### 3. Sprint Progress
+
+Although the Claim Management tasks were planned for Sprint 3, the team was unable to complete the implementation during the sprint.
+
+The main reason was the team's **academic workload and assignment commitments**, which significantly limited the time available for development.
+
+As a result, none of the planned User Stories reached the Definition of Done during Sprint 3.
+
+The User Stories were therefore **not marked as completed** and were carried forward to the next sprint.
+
+---
+
+#### 4. Claim Management Work
+
+The following Claim Management features were planned but remained incomplete during Sprint 3:
+
+- Submit Claim Request
+- Track Claim Status
+- Receive Claim Notifications
+- Review Claim Requests
+- Approve or Reject Claims
+- Integrate claims with Found Item posts
+- Integrate claims with the database
+
+These features will be continued in the next sprint.
+
+---
+
+### Sprint 3 Deliverable
+
+No planned User Stories were completed during Sprint 3.
+
+The Claim Management functionality remains as outstanding work and will be carried forward to the next sprint.
+
+The planned user workflow is:
+
+> **Login → View Found Item → Submit Claim → Track Claim Status → Receive Notification**
+
+The planned administrator workflow is:
+
+> **Login → View Claim Requests → Review Claim → Approve/Reject → Update Claim Status**
+
+---
+
+
+### Sprint 3 Review
+
+The team reviewed the planned Claim Management functionality at the end of the sprint.
+
+However, none of the four planned User Stories were completed according to the Definition of Done.
+
+Therefore, no User Story was marked as completed during Sprint 3.
+
+The remaining Claim Management work was reviewed and planned to be carried forward to the next sprint.
+
+---
+
+### Sprint 3 Outcome
+
+Sprint 3 did not achieve the planned Sprint Goal.
+
+The following User Stories remain incomplete:
+
+- **US-12:** Submit Claim Request — **5 points**
+- **US-13:** Track Claim Status — **3 points**
+- **US-14:** Receive Claim Notifications — **5 points**
+- **US-15:** Review Claim Requests — **5 points**
+
+All four User Stories will be carried forward to Sprint 4.
+
+The team did not mark incomplete work as completed in order to maintain an accurate representation of the Sprint progress.
+
+---
+
+### Client Feedback
+
+The Claim Management requirements and previously received client feedback were reviewed by the team.
+
+The remaining requirements will be addressed during the next sprint when development continues.
+
+The team will prioritize completing the Claim Management workflow and integrating it with the existing Lost & Found system.
+
+---
+
+### Sprint 3 Reflection
+
+| **Metric** | **Status** |
+|---|---:|
+| **Stories Planned** | 4 |
+| **Stories Completed** | 0 |
+| **Total Story Points Planned** | 18 |
+| **Story Points Completed** | 0 |
+| **Velocity** | 0 |
+
+**Completion Rate:** 0%
+
+### Planned User Stories
+
+- **US-12:** Submit Claim Request — **5 points**
+- **US-13:** Track Claim Status — **3 points**
+- **US-14:** Receive Claim Notifications — **5 points**
+- **US-15:** Review Claim Requests — **5 points**
+
+**Total Planned Story Points: 18**
+
+### Carried Forward to Sprint 4
+
+All **4 User Stories (18 Story Points)** will be carried forward to Sprint 4.
+
+The team will prioritize completing the Claim Management workflow, integrating it with the existing posts and database, and addressing the remaining client feedback.
+
+---
+
 # Story Point Estimation
 
 The development team uses the Fibonacci sequence to estimate the relative effort and complexity of User Stories.
