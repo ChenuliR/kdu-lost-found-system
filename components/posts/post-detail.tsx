@@ -25,16 +25,10 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { User } from "@supabase/supabase-js";
-import {
-  Calendar,
-  KeyRound,
-  Loader2,
-  MapPin,
-  Send,
-  ShieldCheck,
-} from "lucide-react";
+import { Calendar, KeyRound, Loader2, MapPin, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import { useActionState } from "react";
+import Link from "next/link";
 
 const categories = [
   ["Laptop/Computer", "laptop/computer"],
@@ -247,46 +241,25 @@ export default function PostDetail({ post, user }: { post: any; user: User }) {
             </Card>
           )}
         </main>
-        <div className="w-100 p-4 h-fit border border-primary/20 rounded-sm space-y-6">
-          <div className="space-y-2">
-            <h2 className="font-semibold flex gap-1 items-center">
-              <ShieldCheck size={18} />
-              Claim this item
-            </h2>
-            <p className="text-xs text-muted-foreground">
-              If this is your item, provide specific details to prove ownership.
-            </p>
+        {post.user_id !== user.id && (
+          <div className="w-100 p-4 h-fit border border-primary/20 rounded-sm space-y-6">
+            <div className="space-y-2">
+              <h2 className="font-semibold flex gap-1 items-center">
+                <ShieldCheck size={18} />
+                Claim this item
+              </h2>
+              <p className="text-xs text-muted-foreground">
+                If this is your item, provide specific details to prove
+                ownership.
+              </p>
+            </div>
+            <Link href={`/claims/new/${post.id}`}>
+              <Button className="w-full rounded-sm cursor-pointer">
+                Submit Claim
+              </Button>
+            </Link>
           </div>
-          <FieldSet>
-            <FieldGroup>
-              <Field>
-                <FieldLabel htmlFor="description">
-                  Details proving ownership
-                </FieldLabel>
-                <Textarea
-                  id="description"
-                  placeholder="The serial number is C02x-322..., the wallpaper is a picture of..."
-                  className="resize-none rounded-sm"
-                  required
-                />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="contact-info">
-                  Contact Information
-                </FieldLabel>
-                <Input
-                  id="contact-info"
-                  placeholder="Email or Phone Number"
-                  required
-                />
-              </Field>
-            </FieldGroup>
-          </FieldSet>
-          <Button className="w-full rounded-sm cursor-pointer">
-            <Send data-icon="inline-start" />
-            Submit Claim
-          </Button>
-        </div>
+        )}
       </section>
     </>
   );
