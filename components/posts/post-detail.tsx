@@ -248,7 +248,8 @@ export default function PostDetail({ post, user }: { post: any; user: User }) {
             </Card>
           )}
         </main>
-        <div className="w-100 p-4 h-fit border border-primary/20 rounded-sm space-y-6">
+        {post.type === "found" && post.status === "Active" ? (
+          <div className="w-100 p-4 h-fit border border-primary/20 rounded-sm space-y-6">
           <div className="space-y-2">
             <h2 className="font-semibold flex gap-1 items-center">
               <ShieldCheck size={18} />
@@ -292,7 +293,8 @@ export default function PostDetail({ post, user }: { post: any; user: User }) {
               Submit Claim
             </Button>
           </form>
-        </div>
+          </div>
+        ) : null}
       </section>
     </>
   );
