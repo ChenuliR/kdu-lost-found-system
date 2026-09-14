@@ -29,6 +29,7 @@ import {
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser-client";
 import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useState } from "react";
 import { toast } from "./ui/toast";
 
@@ -126,7 +127,7 @@ export function NavUser({ user }: AuthUser) {
                 <CreditCard />
                 Billing
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem render={<Link href="/notifications" />}>
                 <Bell />
                 Notifications
               </DropdownMenuItem>

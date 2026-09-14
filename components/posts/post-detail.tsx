@@ -1,6 +1,7 @@
 "use client";
 
 import { updatePost } from "@/app/(authenticated)/posts/actions";
+import { submitClaim } from "@/app/(authenticated)/claims/actions";
 import DeleteModal from "@/components/delete-modal";
 import ImageModal from "@/components/image-modal";
 import { Badge } from "@/components/ui/badge";
