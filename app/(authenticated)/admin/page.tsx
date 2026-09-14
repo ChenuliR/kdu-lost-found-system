@@ -1,4 +1,4 @@
-import { getAdminClaims, updateClaimStatus } from "@/app/(authenticated)/claims/actions";
+import { getAdminClaims } from "@/app/(authenticated)/claims/actions";
 import AdminModeration from "@/components/admin-moderation";
 import PageLayout from "@/components/page-layout";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,6 @@ import {
   ArrowLeft,
   ArrowRight,
   Bell,
-  Check,
   CheckCircle2,
   CircleAlert,
   MoreVertical,
@@ -18,7 +17,6 @@ import {
   Trash2,
   TrendingUp,
   Trophy,
-  X,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -167,26 +165,14 @@ export default async function AdminDashboardPage() {
                       >
                         {claim.status}
                       </span>
-                      {claim.status === "Pending" ? (
-                        <>
-                          <form action={updateClaimStatus}>
-                            <input type="hidden" name="claimId" value={claim.id} />
-                            <input type="hidden" name="status" value="Rejected" />
-                            <Button variant="outline" size="sm">
-                              <X />
-                              Reject
-                            </Button>
-                          </form>
-                          <form action={updateClaimStatus}>
-                            <input type="hidden" name="claimId" value={claim.id} />
-                            <input type="hidden" name="status" value="Approved" />
-                            <Button size="sm">
-                              <Check />
-                              Approve
-                            </Button>
-                          </form>
-                        </>
-                      ) : null}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        nativeButton={false}
+                        render={<Link href={`/admin/claims/${claim.id}`} />}
+                      >
+                        Review
+                      </Button>
                     </div>
                   </div>
                 ))

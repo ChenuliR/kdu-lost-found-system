@@ -32,8 +32,12 @@ create table if not exists public.claims (
     check (status in ('Pending', 'Approved', 'Rejected')),
   admin_comments text,
   created_at timestamptz not null default now(),
-  reviewed_at timestamptz
+  reviewed_at timestamptz,
+  reviewed_by uuid references auth.users(id)
 );
+
+alter table public.claims
+add column if not exists reviewed_by uuid references auth.users(id);
 
 -- Notifications table
 create table if not exists public.notifications (
@@ -197,3 +201,32 @@ after update of status on public.claims
 for each row
 when (old.status is distinct from new.status)
 execute function public.notify_claim_status_change();
+
+-- Reject other pending claims when one claim is approved for an item
+create or replace function public.reject_other_claims_after_approval()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  update public.claims
+  set status = 'Rejected',
+      admin_comments = 'Another claim for this item was approved.',
+      reviewed_at = now(),
+      reviewed_by = new.reviewed_by
+  where post_id = new.post_id
+    and id <> new.id
+    and status = 'Pending';
+
+  return new;
+end;
+$$;
+
+drop trigger if exists reject_other_claims_after_approval on public.claims;
+
+create trigger reject_other_claims_after_approval
+after update of status on public.claims
+for each row
+when (new.status = 'Approved')
+execute function public.reject_other_claims_after_approval();

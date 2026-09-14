@@ -31,11 +31,11 @@ export async function submitClaim(formData: FormData) {
 
   const { data: post, error: postError } = await supabase
     .from("posts")
-    .select("status")
+    .select("status, type")
     .eq("id", postId)
     .single();
 
-  if (postError || !post || post.status !== "Active") {
+  if (postError || !post || post.status !== "Active" || post.type !== "found") {
     throw new Error("This item is no longer available for claims");
   }
 
@@ -83,6 +83,55 @@ export async function getAdminClaims() {
   });
 }
 
+export async function getAdminClaimById(claimId: string) {
+  const supabase = await createSupabaseServerClient();
+  const user = await getAuthUser();
+
+  if (!isAdmin(user)) {
+    throw new Error("Unauthorized");
+  }
+
+  const { data, error } = await supabase
+    .from("claims")
+    .select(
+      "id, post_id, claimant_id, proof_details, contact_info, status, admin_comments, created_at, reviewed_at, reviewed_by, posts(item_name, category, type, date, location, description, image_url, status, user_id)",
+    )
+    .eq("id", claimId)
+    .single();
+
+  if (error || !data) {
+    throw new Error("Claim could not be found");
+  }
+
+  const post = Array.isArray(data.posts) ? data.posts[0] : data.posts;
+
+  return {
+    id: data.id,
+    postId: data.post_id,
+    claimantId: data.claimant_id,
+    proofDetails: data.proof_details,
+    contactInfo: data.contact_info,
+    status: data.status as ClaimStatus,
+    adminComments: data.admin_comments,
+    createdAt: data.created_at,
+    reviewedAt: data.reviewed_at,
+    reviewedBy: data.reviewed_by,
+    post: post
+      ? {
+          itemName: post.item_name,
+          category: post.category,
+          type: post.type,
+          date: post.date,
+          location: post.location,
+          description: post.description,
+          imageUrl: post.image_url,
+          status: post.status,
+          ownerId: post.user_id,
+        }
+      : null,
+  };
+}
+
 export async function getUserClaims() {
   const supabase = await createSupabaseServerClient();
   const user = await getAuthUser();
@@ -115,12 +164,14 @@ export async function updateClaimStatus(formData: FormData) {
   const user = await getAuthUser();
   const claimId = formData.get("claimId");
   const status = formData.get("status");
+  const adminComments = formData.get("adminComments");
 
   if (
     !isAdmin(user) ||
     typeof claimId !== "string" ||
     !claimStatuses.includes(status as ClaimStatus) ||
-    status === "Pending"
+    status === "Pending" ||
+    (adminComments !== null && typeof adminComments !== "string")
   ) {
     throw new Error("Unauthorized");
   }
@@ -135,20 +186,30 @@ export async function updateClaimStatus(formData: FormData) {
     throw new Error("Claim could not be found");
   }
 
-  if (claim.status === status) {
-    return;
+  if (claim.status !== "Pending") {
+    throw new Error("Only pending claims can be reviewed");
   }
 
   const { error } = await supabase
     .from("claims")
-    .update({ status, reviewed_at: new Date().toISOString() })
-    .eq("id", claimId);
+    .update({
+      status,
+      admin_comments:
+        typeof adminComments === "string" && adminComments.trim()
+          ? adminComments.trim()
+          : null,
+      reviewed_at: new Date().toISOString(),
+      reviewed_by: user.id,
+    })
+    .eq("id", claimId)
+    .eq("status", "Pending");
 
   if (error) {
     throw new Error(error.message);
   }
 
   revalidatePath("/admin");
+  revalidatePath(`/admin/claims/${claimId}`);
   revalidatePath("/notifications");
 }
 
