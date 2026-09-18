@@ -534,8 +534,206 @@ All **4 User Stories (18 Story Points)** will be carried forward to Sprint 4.
 
 The team will prioritize completing the Claim Management workflow, integrating it with the existing posts and database, and addressing the remaining client feedback.
 
+
+---
+## Sprint 4: Integration & Iterative Enhancements (Carry-over Claim Management)
+
+**Due Date:** September 15, 2026
+
+**Sprint Status:** Completed
+
+**Sprint Goal:** Complete and integrate the core Claim Management workflow carried forward from the previous sprint, while addressing remaining client feedback.
+
 ---
 
+### Key Activities
+
+#### 1. Sprint 4 Planning
+
+Sprint 4 began with a review of the remaining Claim Management work carried forward from the previous sprint.
+
+The following User Stories were selected for Sprint 4:
+
+- **US-12:** Submit Claim Request
+- **US-13:** Track Claim Status
+- **US-14:** Receive Claim Notifications
+- **US-15:** Review Claim Requests
+
+The team prioritized the Claim Management workflow because it is a core part of the system and required integration with the existing Lost & Found posting functionality.
+
+**Sprint Goal:**
+
+> "Complete and integrate the core Claim Management workflow carried forward from the previous sprint, while addressing remaining client feedback."
+
+---
+
+### 2. Claim Submission Development
+
+The team implemented the functionality that allows users to submit claims for Found items.
+
+The completed functionality includes:
+
+- Selecting a Found item to claim
+- Submitting a claim request
+- Providing proof of ownership details
+- Validating claim information
+- Storing claim details in the database
+- Associating the claim with the relevant Found item and claimant
+
+**User Story:**  
+**US-12 – Submit Claim Request**
+
+**Story Points:** 5
+
+**Status:** Completed
+
+---
+
+### 3. Claim Status Tracking
+
+The team implemented functionality that allows users to track the progress of their submitted claims.
+
+The claim status workflow was integrated into the system so that users can view the current status of their requests.
+
+The supported claim statuses include:
+
+- Pending
+- Approved
+- Rejected
+
+**User Story:**  
+**US-13 – Track Claim Status**
+
+**Story Points:** 3
+
+**Status:** Completed
+
+---
+
+### 4. Claim Notifications
+
+The notification functionality was implemented to inform relevant users when the status of a claim changes.
+
+The system supports notifications related to claim status updates and connects the notification process with the Claim Management workflow.
+
+**User Story:**  
+**US-14 – Receive Claim Notifications**
+
+**Story Points:** 5
+
+**Status:** Completed
+
+---
+
+### 5. Admin Claim Review
+
+The team completed the administrative functionality required to review submitted claim requests.
+
+The administrator can:
+
+- View submitted claim requests
+- Review the claimant's provided information
+- Review the relevant Found item
+- Approve a claim
+- Reject a claim
+- Update the claim status
+
+The claim review process was integrated with the existing item and user information.
+
+**User Story:**  
+**US-15 – Review Claim Requests**
+
+**Story Points:** 5
+
+**Status:** Completed
+
+---
+
+### 6. Claim Management Integration
+
+The Claim Management workflow was integrated with the existing Lost & Found system.
+
+The integration included:
+
+- Connecting claims with Found item posts
+- Connecting claims with authenticated users
+- Storing claim information in the database
+- Updating claim status
+- Linking admin decisions with claim status
+- Updating the relevant item workflow
+- Connecting claim status changes with notifications
+
+The complete workflow was tested from claim submission through administrative review and status notification.
+
+---
+
+### 7. Client Feedback and Improvements
+
+The team reviewed the remaining feedback and issues identified during the previous milestone.
+
+The identified improvements were incorporated into the Claim Management workflow and related system components.
+
+The team also tested the updated functionality to ensure that the new features worked correctly with the existing system.
+
+---
+
+### 8. Testing and Bug Fixing
+
+Testing was conducted on the Claim Management workflow.
+
+The team tested:
+
+- Claim submission
+- Claim validation
+- Claim status tracking
+- Claim approval
+- Claim rejection
+- Claim notifications
+- Integration between claims and Found item posts
+- Database operations
+- User and administrator access
+
+Identified issues were reviewed and fixed during the sprint.
+
+---
+
+## Story Point Estimation
+
+The team used the Fibonacci story-point scale:
+
+**1, 2, 3, 5, 8, 13**
+
+Story points were estimated based on relative complexity, development effort, integration requirements, uncertainty, and testing requirements.
+
+| User Story | Story Points | Reason | Status |
+| :--- | :---: | :--- | :--- |
+| **US-12 Submit Claim Request** | 5 | Claim form, validation, database integration, and ownership details | Completed |
+| **US-13 Track Claim Status** | 3 | Retrieve and display claim status | Completed |
+| **US-14 Receive Claim Notifications** | 5 | Notification workflow and integration with claim status changes | Completed |
+| **US-15 Review Claim Requests** | 5 | Admin review, approval/rejection workflow, and database integration | Completed |
+| **Total** | **18** | | **Completed** |
+
+---
+
+## Sprint 4 Deliverable
+
+By the end of Sprint 4, the system supports the complete core Claim Management workflow:
+
+Found Item
+     ↓
+Submit Claim Request
+     ↓
+Claim Status: Pending
+     ↓
+Admin Reviews Claim
+     ↓
+Approve / Reject
+     ↓
+Claim Status Updated
+     ↓
+User Receives Notification
+     ↓
+User Tracks Claim Status
 # Story Point Estimation
 
 The development team uses the Fibonacci sequence to estimate the relative effort and complexity of User Stories.
