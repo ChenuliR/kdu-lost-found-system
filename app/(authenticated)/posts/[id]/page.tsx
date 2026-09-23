@@ -23,9 +23,29 @@ export default async function PostDetailsPage({
     notFound();
   }
 
+  const { data: claims } =
+    user?.id === post.user_id
+      ? await supabase
+          .from("claims")
+          .select("id, claimant_id, status, proof_details, created_at")
+          .eq("post_id", post.id)
+          .order("created_at", { ascending: false })
+      : { data: [] };
+
+  const { data: comments } = await supabase
+    .from("comments")
+    .select("id, author_id, content, created_at")
+    .eq("post_id", post.id)
+    .order("created_at", { ascending: true });
+
   return (
     <PageLayout>
-      <PostDetail post={post} user={user} />
+      <PostDetail
+        post={post}
+        user={user}
+        claims={claims ?? []}
+        comments={comments ?? []}
+      />
     </PageLayout>
   );
 }

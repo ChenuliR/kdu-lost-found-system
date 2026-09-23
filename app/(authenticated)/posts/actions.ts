@@ -170,6 +170,34 @@ export async function deletePost(formData: FormData) {
   redirect("/posts/my-posts");
 }
 
+export async function createComment(formData: FormData) {
+  const supabase = await createSupabaseServerClient();
+  const user = await getAuthUser();
+  const postId = formData.get("postId");
+  const content = formData.get("content");
+
+  if (
+    typeof postId !== "string" ||
+    !postId ||
+    typeof content !== "string" ||
+    !content.trim()
+  ) {
+    throw new Error("Comment cannot be empty");
+  }
+
+  const { error } = await supabase.from("comments").insert({
+    post_id: postId,
+    author_id: user.id,
+    content: content.trim(),
+  });
+
+  if (error) {
+    throw new Error("Failed to post comment");
+  }
+
+  redirect(`/posts/${postId}`);
+}
+
 export async function getUserPosts(type?: PostType) {
   const supabase = await createSupabaseServerClient();
   const user = await getAuthUser();
