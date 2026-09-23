@@ -1,6 +1,6 @@
 "use client";
 
-import { updatePost } from "@/app/(authenticated)/posts/actions";
+import { createComment, updatePost } from "@/app/(authenticated)/posts/actions";
 import { submitClaim } from "@/app/(authenticated)/claims/actions";
 import DeleteModal from "@/components/delete-modal";
 import ImageModal from "@/components/image-modal";
@@ -25,8 +25,9 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { User } from "@supabase/supabase-js";
-import { Calendar, KeyRound, Loader2, MapPin, ShieldCheck } from "lucide-react";
+import { Bell, Calendar, Check, Clock3, KeyRound, Loader2, MapPin, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import { useActionState } from "react";
 import Link from "next/link";
@@ -47,7 +48,32 @@ const categories = [
   ["Other", "other"],
 ] as const;
 
-export default function PostDetail({ post, user }: { post: any; user: User }) {
+type PostClaim = {
+  id: string;
+  claimant_id: string;
+  status: "Pending" | "Approved" | "Rejected";
+  proof_details: string;
+  created_at: string;
+};
+
+type PostComment = {
+  id: string;
+  author_id: string;
+  content: string;
+  created_at: string;
+};
+
+export default function PostDetail({
+  post,
+  user,
+  claims,
+  comments,
+}: {
+  post: any;
+  user: User;
+  claims: PostClaim[];
+  comments: PostComment[];
+}) {
   const [state, formAction, isPending] = useActionState(
     async (prevState: any, formData: FormData) => {
       return await updatePost(formData);
@@ -129,13 +155,108 @@ export default function PostDetail({ post, user }: { post: any; user: User }) {
               <CardDescription>{post.description}</CardDescription>
             </CardHeader>
           </Card>
+          <Card className="rounded-sm">
+            <CardHeader>
+              <CardTitle>Comments</CardTitle>
+              <CardDescription>
+                Ask a question or share useful information about this item.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {comments.length > 0 ? (
+                <div className="space-y-3">
+                  {comments.map((comment) => (
+                    <div key={comment.id} className="rounded-md border p-3">
+                      <p className="whitespace-pre-wrap text-sm">{comment.content}</p>
+                      <p className="mt-2 text-xs text-muted-foreground">
+                        {comment.author_id === user.id ? "You" : `User ${comment.author_id.slice(0, 8)}`} · {new Date(comment.created_at).toLocaleString()}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">No comments yet.</p>
+              )}
+              <form action={createComment} className="space-y-3 border-t pt-4">
+                <input type="hidden" name="postId" value={post.id} />
+                <Textarea name="content" placeholder="Write a comment" required />
+                <Button type="submit">Post comment</Button>
+              </form>
+            </CardContent>
+          </Card>
           {post.user_id === user.id && (
             <Card className="rounded-sm">
-              <CardHeader>
-                <CardTitle>Manage post</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="grid grid-cols-2 items-start gap-3">
+              <Tabs defaultValue="notifications">
+                <CardHeader>
+                  <TabsList className="w-full">
+                    <TabsTrigger value="notifications" className="flex-1 gap-2">
+                      <Bell />
+                      Notifications
+                      {claims.filter((claim) => claim.status === "Pending").length > 0 && (
+                        <Badge variant="destructive">
+                          {claims.filter((claim) => claim.status === "Pending").length}
+                        </Badge>
+                      )}
+                    </TabsTrigger>
+                    <TabsTrigger value="manage" className="flex-1">
+                      Manage post
+                    </TabsTrigger>
+                  </TabsList>
+                </CardHeader>
+                <TabsContent value="notifications" className="px-6 pb-6">
+                  {claims.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">
+                      No claim requests have been submitted for this post.
+                    </p>
+                  ) : (
+                    <div className="space-y-3">
+                      {claims.map((claim) => (
+                        <div
+                          key={claim.id}
+                          className="rounded-md border p-3 text-sm"
+                        >
+                          <div className="flex items-start justify-between gap-3">
+                            <div className="min-w-0">
+                              <p className="font-medium">
+                                Claim request from {claim.claimant_id.slice(0, 8)}
+                              </p>
+                              <p className="mt-1 line-clamp-2 text-muted-foreground">
+                                {claim.proof_details}
+                              </p>
+                              <p className="mt-2 flex items-center gap-1 text-xs text-muted-foreground">
+                                <Clock3 className="size-3" />
+                                {new Date(claim.created_at).toLocaleString()}
+                              </p>
+                            </div>
+                            <Badge
+                              variant={
+                                claim.status === "Approved"
+                                  ? "default"
+                                  : claim.status === "Rejected"
+                                    ? "destructive"
+                                    : "secondary"
+                              }
+                            >
+                              {claim.status}
+                            </Badge>
+                          </div>
+                          <Button
+                            className="mt-3 w-full"
+                            size="sm"
+                            variant={claim.status === "Pending" ? "default" : "outline"}
+                            nativeButton={false}
+                            render={<Link href={`/claims/${claim.id}`} />}
+                          >
+                            {claim.status === "Pending" ? <Check /> : <Bell />}
+                            {claim.status === "Pending" ? "Review claim" : "View claim"}
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </TabsContent>
+                <TabsContent value="manage" className="px-6 pb-6">
+                  <div className="grid grid-cols-2 items-start gap-3">
                   <details>
                     <summary
                       aria-disabled={isPending}
@@ -237,8 +358,9 @@ export default function PostDetail({ post, user }: { post: any; user: User }) {
                     </form>
                   </details>
                   <DeleteModal id={post.id} disabled={isPending} />
-                </div>
-              </CardContent>
+                  </div>
+                </TabsContent>
+              </Tabs>
             </Card>
           )}
         </main>

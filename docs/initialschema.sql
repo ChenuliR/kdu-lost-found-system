@@ -39,11 +39,22 @@ create table if not exists public.claims (
 alter table public.claims
 add column if not exists reviewed_by uuid references auth.users(id);
 
+-- Comments table
+create table if not exists public.comments (
+  id uuid primary key default gen_random_uuid(),
+  post_id uuid not null references public.posts(id) on delete cascade,
+  author_id uuid not null references auth.users(id) on delete cascade,
+  content text not null,
+  created_at timestamptz not null default now()
+);
+
 -- Notifications table
 create table if not exists public.notifications (
   id uuid primary key default gen_random_uuid(),
   recipient_id uuid not null references auth.users(id) on delete cascade,
   claim_id uuid references public.claims(id) on delete cascade,
+  post_id uuid references public.posts(id) on delete cascade,
+  comment_id uuid references public.comments(id) on delete cascade,
   type text not null default 'claim_status_changed',
   message text not null,
   read_at timestamptz,
@@ -53,6 +64,7 @@ create table if not exists public.notifications (
 -- Enable Row Level Security
 alter table public.posts enable row level security;
 alter table public.claims enable row level security;
+alter table public.comments enable row level security;
 alter table public.notifications enable row level security;
 
 -- Posts policies
@@ -128,12 +140,164 @@ to authenticated
 using ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin')
 with check ((auth.jwt() -> 'app_metadata' ->> 'role') = 'admin');
 
+drop policy if exists "Post owners can approve or reject claims" on public.claims;
+
+create policy "Post owners can approve or reject claims"
+on public.claims
+for update
+to authenticated
+using (
+  exists (
+    select 1
+    from public.posts
+    where posts.id = claims.post_id
+      and posts.user_id = auth.uid()
+  )
+)
+with check (
+  exists (
+    select 1
+    from public.posts
+    where posts.id = claims.post_id
+      and posts.user_id = auth.uid()
+  )
+);
+
+-- Owner review RPC: bypasses client-side RLS after validating auth.uid() owns the post.
+drop function if exists public.review_claim_as_owner(uuid, text, text);
+
+create or replace function public.review_claim_as_owner(
+  p_claim_id uuid,
+  p_status text,
+  p_comments text default null
+)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  selected_claim public.claims%rowtype;
+  competing_claim public.claims%rowtype;
+begin
+  if p_status not in ('Approved', 'Rejected') then
+    raise exception 'Invalid claim status';
+  end if;
+
+  select claims.*
+  into selected_claim
+  from public.claims
+  join public.posts on posts.id = claims.post_id
+  where claims.id = p_claim_id
+    and claims.status = 'Pending'
+    and posts.user_id = auth.uid();
+
+  if not found then
+    raise exception 'Claim is not pending or you do not own this post';
+  end if;
+
+  update public.claims
+  set status = p_status,
+      admin_comments = p_comments,
+      reviewed_at = now(),
+      reviewed_by = auth.uid()
+  where id = selected_claim.id;
+
+  insert into public.notifications (recipient_id, claim_id, type, message)
+  values (
+    selected_claim.claimant_id,
+    selected_claim.id,
+    'claim_status_changed',
+    'Your claim status has been updated to ' || p_status || '.'
+  );
+
+  if p_status = 'Approved' then
+    update public.posts
+    set status = 'Claimed'
+    where id = selected_claim.post_id;
+
+    for competing_claim in
+      select *
+      from public.claims
+      where post_id = selected_claim.post_id
+        and status = 'Pending'
+        and id <> selected_claim.id
+    loop
+      update public.claims
+      set status = 'Rejected',
+          admin_comments = 'Another claim for this item was approved.',
+          reviewed_at = now(),
+          reviewed_by = auth.uid()
+      where id = competing_claim.id;
+
+      insert into public.notifications (recipient_id, claim_id, type, message)
+      values (
+        competing_claim.claimant_id,
+        competing_claim.id,
+        'claim_status_changed',
+        'Your claim status has been updated to Rejected.'
+      );
+    end loop;
+  end if;
+end;
+$$;
+
+revoke all on function public.review_claim_as_owner(uuid, text, text) from public;
+grant execute on function public.review_claim_as_owner(uuid, text, text) to authenticated;
+
+notify pgrst, 'reload schema';
+
+-- Comments policies
+create policy "Authenticated users can view comments"
+on public.comments
+for select
+to authenticated
+using (true);
+
+create policy "Users can create their own comments"
+on public.comments
+for insert
+to authenticated
+with check (auth.uid() = author_id);
+
 -- Users can only view and mark their own notifications as read
 create policy "Users can view their notifications"
 on public.notifications
 for select
 to authenticated
 using (auth.uid() = recipient_id);
+
+create policy "Claimants can notify post owners"
+on public.notifications
+for insert
+to authenticated
+with check (
+  type = 'claim_submitted'
+  and exists (
+    select 1
+    from public.claims
+    join public.posts on posts.id = claims.post_id
+    where claims.id = notifications.claim_id
+      and claims.claimant_id = auth.uid()
+      and posts.user_id = notifications.recipient_id
+  )
+);
+
+create policy "Post owners can notify claimants"
+on public.notifications
+for insert
+to authenticated
+with check (
+  type = 'claim_status_changed'
+  and exists (
+    select 1
+    from public.claims
+    join public.posts on posts.id = claims.post_id
+    where claims.id = notifications.claim_id
+      and claims.claimant_id = notifications.recipient_id
+      and posts.user_id = auth.uid()
+  )
+);
 
 create policy "Users can mark their notifications as read"
 on public.notifications
@@ -201,6 +365,66 @@ after update of status on public.claims
 for each row
 when (old.status is distinct from new.status)
 execute function public.notify_claim_status_change();
+
+create or replace function public.notify_claim_submission()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  insert into public.notifications (recipient_id, claim_id, type, message)
+  select posts.user_id,
+    new.id,
+    'claim_submitted',
+    'A new claim was submitted for your post: ' || posts.item_name || '.'
+  from public.posts
+  where posts.id = new.post_id;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists claim_submission_notification on public.claims;
+
+create trigger claim_submission_notification
+after insert on public.claims
+for each row
+execute function public.notify_claim_submission();
+
+create or replace function public.notify_comment_submission()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  insert into public.notifications (
+    recipient_id,
+    post_id,
+    comment_id,
+    type,
+    message
+  )
+  select posts.user_id,
+    new.post_id,
+    new.id,
+    'comment_submitted',
+    'A new comment was posted on your item: ' || posts.item_name || '.'
+  from public.posts
+  where posts.id = new.post_id
+    and posts.user_id <> new.author_id;
+
+  return new;
+end;
+$$;
+
+drop trigger if exists comment_submission_notification on public.comments;
+
+create trigger comment_submission_notification
+after insert on public.comments
+for each row
+execute function public.notify_comment_submission();
 
 -- Reject other pending claims when one claim is approved for an item
 create or replace function public.reject_other_claims_after_approval()

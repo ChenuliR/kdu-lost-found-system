@@ -10,7 +10,8 @@ const statusVariants = {
 } as const;
 
 export default async function ClaimsPage() {
-  const claims = await getUserClaims();
+  const result = await getUserClaims();
+  const claims = result.claims || [];
 
   return (
     <PageLayout
@@ -28,13 +29,21 @@ export default async function ClaimsPage() {
           {claims.map((claim) => (
             <Card key={claim.id}>
               <CardHeader className="flex-row items-center justify-between gap-4">
-                <CardTitle className="truncate">{claim.itemName}</CardTitle>
-                <Badge variant={statusVariants[claim.status]}>
+                <CardTitle className="truncate">
+                  {(claim.posts as { item_name: string }[] | null)?.[0]?.item_name}
+                </CardTitle>
+                <Badge
+                  variant={
+                    statusVariants[
+                      claim.status as keyof typeof statusVariants
+                    ]
+                  }
+                >
                   {claim.status}
                 </Badge>
               </CardHeader>
               <CardContent className="text-sm text-muted-foreground">
-                Submitted {new Date(claim.createdAt).toLocaleDateString()}
+                Submitted {new Date(claim.created_at).toLocaleDateString()}
               </CardContent>
             </Card>
           ))}
