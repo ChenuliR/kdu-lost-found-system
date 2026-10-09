@@ -989,7 +989,7 @@ The team selected US-16 (Moderate Posts) and US-17 (View Dashboard) from the Pro
 | :----------------------- | :-------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------- |
 | **September 25, 2026**   | Sprint 5 planning focused on the remaining Administration features. US-16 and US-17 were selected for implementation. | Remaining development work                          |
 | **September 30, 2026** | Development continued on post moderation and the administrative dashboard.                                            | Features require further implementation and testing |
-| **September 2, 2026** | The team reviewed the outstanding work and identified the tasks that need to be carried forward.                      | Sprint deadline exceeded                            |
+| **October 2, 2026** | The team reviewed the outstanding work and identified the tasks that need to be carried forward.                      | Sprint deadline exceeded                            |
 
 ---
 
