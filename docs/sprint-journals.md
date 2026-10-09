@@ -844,6 +844,229 @@ The completion of Sprint 4 established the core Claim Management workflow of the
 The remaining development work consists of the **Admin & Moderation features**, including post moderation and the administrator dashboard, followed by UAT, final testing, deployment, documentation, and project handover.
 
 ---
+
+## Sprint 5: Administration & Final Feature Completion
+
+**Sprint Duration:** September 25 – October 2, 2026
+
+**Sprint Goal:** Complete the remaining Administration features by implementing post moderation and the administrative dashboard, ensuring the system is ready for final testing and user acceptance.
+
+---
+
+### Key Activities
+
+#### 1. Sprint 5 Planning
+
+Sprint 5 focused on completing the remaining Administration features of the Campus Lost & Found Portal.
+
+The following User Stories were selected from the Product Backlog:
+
+* **US-16:** Moderate Posts
+* **US-17:** View Dashboard
+
+**Sprint Goal:**
+
+> "Complete the remaining Administration features and prepare the system for final testing and user acceptance."
+
+**Planned Story Points:** 10
+
+---
+
+#### 2. Post Moderation
+
+The team planned to implement the post moderation functionality for administrators.
+
+The planned features include:
+
+* Review reported posts
+* Identify and manage inappropriate posts
+* Moderate existing Lost and Found listings
+* Maintain appropriate post statuses
+* Integrate moderation functionality with the existing application and database
+
+**Current Status:** In Progress
+
+The post moderation functionality has not yet met all the completion criteria. Further development and testing are required before the user story can be marked as completed.
+
+---
+
+#### 3. Administrative Dashboard
+
+The team planned to develop the administrative dashboard to provide a centralized view of the system's information.
+
+The planned features include:
+
+* Display relevant system statistics
+* Provide an overview of Lost and Found listings
+* Present relevant information for administrative management
+* Integrate dashboard information with the existing database
+* Improve the administrator's ability to monitor the system
+
+**Current Status:** In Progress
+
+The dashboard functionality is still being developed. Further implementation, integration, and testing are required before the user story can be marked as completed.
+
+---
+
+#### 4. System Integration
+
+The planned administration features need to be integrated with the existing Campus Lost & Found Portal.
+
+The integration activities include:
+
+* Connect post moderation functionality with existing item listings
+* Integrate the administrative dashboard with stored system data
+* Verify administrator access to the relevant features
+* Maintain consistency between the frontend and backend
+* Check database interactions and data accuracy
+
+These activities will help ensure that the administration features work correctly with the previously implemented authentication, posting, search, and claim management modules.
+
+---
+
+#### 5. Testing and Bug Fixing
+
+Testing is required to verify the correctness and reliability of the remaining administration features.
+
+The planned testing activities include:
+
+* Test post moderation workflows
+* Verify dashboard information and statistics
+* Check database integration
+* Identify and fix implementation issues
+* Perform regression testing on existing functionality
+* Verify the features against their acceptance criteria
+
+The remaining testing activities will be completed before the final evaluation.
+
+---
+
+#### 6. Final Testing and Documentation Preparation
+
+The team also planned to prepare the project for final testing and handover.
+
+The planned activities include:
+
+* Prepare for User Acceptance Testing (UAT)
+* Record and address remaining client feedback
+* Update the project README and documentation
+* Review outstanding issues on GitHub
+* Prepare deployment and handover materials
+
+These activities will support the final project evaluation once the remaining administration features are completed.
+
+---
+
+### Sprint 5 Deliverable
+
+The intended Sprint 5 deliverable was the completion of the Administration module, including post moderation and the administrative dashboard.
+
+The planned administrator workflow is:
+
+> **Login → Review Posts → Moderate Posts → View Dashboard → Monitor System Information**
+
+However, US-16 and US-17 remain in progress. Therefore, the intended deliverable has not yet been fully achieved.
+
+---
+
+### Ceremonies
+
+#### Sprint Planning 5
+
+**Date:** September 25, 2026
+
+**Attendees:** Scrum Master, Product Owner, Developers (Frontend & Backend), UI/UX Designer
+
+**Outcome:**
+
+The team selected US-16 (Moderate Posts) and US-17 (View Dashboard) from the Product Backlog. The Sprint Goal was established to complete the remaining Administration features and prepare the system for final testing. A total of 10 story points was planned for the sprint.
+
+---
+
+### Daily Standup Logs
+
+| Date                     | Key Updates                                                                                                           | Blockers                                            |
+| :----------------------- | :-------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------- |
+| **September 25, 2026**   | Sprint 5 planning focused on the remaining Administration features. US-16 and US-17 were selected for implementation. | Remaining development work                          |
+| **September 30, 2026** | Development continued on post moderation and the administrative dashboard.                                            | Features require further implementation and testing |
+| **September 2, 2026** | The team reviewed the outstanding work and identified the tasks that need to be carried forward.                      | Sprint deadline exceeded                            |
+
+---
+
+### Sprint 5 Review
+
+The team reviewed the progress of the remaining Administration features against the Sprint Goal.
+
+#### Planned Functionality
+
+* Moderate Posts
+* View Dashboard
+* Integrate administration features with the existing database
+* Test the administration workflows
+* Prepare for final user acceptance testing
+
+#### Sprint 5 Outcome
+
+The Sprint 5 goal was not fully achieved because both planned User Stories remain in progress.
+
+The following work remains outstanding:
+
+* **US-16:** Moderate Posts
+* **US-17:** View Dashboard
+
+The unfinished work has been carried forward to **Milestone 6 – Administration Completion & Final Handover**.
+
+---
+
+### Client Feedback
+
+The remaining Administration features need to be reviewed against the expected requirements before final acceptance.
+
+The team will use the remaining development phase to complete the functionality, conduct testing, and address any feedback received during the final review.
+
+---
+
+### Sprint 5 Reflection
+
+| Metric                         | Status |
+| :----------------------------- | :----- |
+| **Stories Planned**            | 2      |
+| **Stories Completed**          | 0      |
+| **Total Story Points Planned** | 10     |
+| **Story Points Completed**     | 0      |
+| **Velocity**                   | 0      |
+| **Completion Rate**            | 0%     |
+
+**Reflection:** Sprint 5 focused on the remaining Administration features of the Campus Lost & Found Portal. However, US-16 and US-17 have not yet met their completion criteria. The sprint exceeded its original deadline of October 2, 2026, and the remaining work has been carried forward to Milestone 6. The team will focus on completing the outstanding functionality, testing the integrated system, and preparing the final documentation and handover.
+
+---
+
+### Completed User Stories
+
+No User Stories were fully completed during Sprint 5.
+
+The following User Stories remain in progress:
+
+* **US-16:** Moderate Posts — **5 points**
+* **US-17:** View Dashboard — **5 points**
+
+**Total Outstanding Story Points: 10**
+
+---
+
+### Sprint 5 Completion Status
+
+**Sprint Status:** In Progress – Overdue
+
+**Stories Planned:** 2
+
+**Stories Completed:** 0
+
+**Stories Carried Forward:** 2
+
+The team will continue the remaining work under **Milestone 6 – Administration Completion & Final Handover**, focusing on completing post moderation, implementing the administrative dashboard, performing final testing, updating project documentation, and preparing the system for final evaluation.
+
+---
 ### Story Point Estimates
 
 | User Story | Story Points |
