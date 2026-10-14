@@ -1067,6 +1067,241 @@ The following User Stories remain in progress:
 The team will continue the remaining work under **Milestone 6 – Administration Completion & Final Handover**, focusing on completing post moderation, implementing the administrative dashboard, performing final testing, updating project documentation, and preparing the system for final evaluation.
 
 ---
+## Sprint 6: Administration Completion & Final Handover
+
+**Sprint Duration:** October 9 – October 16, 2026
+
+**Sprint Goal:** Complete the remaining Administration features by implementing post moderation and the administrative dashboard, integrating them with the existing system, and preparing the Campus Lost & Found Portal for final evaluation and handover.
+
+---
+
+### Key Activities
+
+#### 1. Sprint 6 Planning
+
+Sprint 6 focused on completing the two outstanding Administration User Stories carried forward from the previous sprint.
+
+The following User Stories were selected:
+
+- **US-16:** Moderate Posts
+- **US-17:** View Dashboard
+
+**Sprint Goal:**
+
+> "Complete the remaining Administration features, verify their functionality, and prepare the system for final evaluation and handover."
+
+**Planned Story Points:** 10
+
+---
+
+#### 2. Post Moderation
+
+The team completed the post moderation functionality for administrators.
+
+The completed work includes:
+
+- Reviewing and managing existing posts.
+- Moderating inappropriate or unsuitable listings.
+- Managing post information through administrative functionality.
+- Integrating moderation with the existing application.
+- Verifying that post moderation works as expected.
+
+**User Story:** US-16 – Moderate Posts
+
+**Story Points:** 5
+
+**Status:** Completed
+
+---
+
+#### 3. Administrative Dashboard
+
+The team completed the administrative dashboard to provide a centralized view of relevant system information.
+
+The completed work includes:
+
+- Implementing the administrative dashboard.
+- Displaying relevant system information and statistics.
+- Providing administrators with an overview of the system.
+- Integrating dashboard information with the existing application and database.
+- Verifying that the dashboard displays the expected information.
+
+**User Story:** US-17 – View Dashboard
+
+**Story Points:** 5
+
+**Status:** Completed
+
+---
+
+#### 4. System Integration
+
+The post moderation and dashboard features were integrated with the existing Campus Lost & Found Portal.
+
+The integration work focused on:
+
+- Connecting post moderation with existing item listings.
+- Integrating the dashboard with available system data.
+- Verifying administrator access to the administration features.
+- Maintaining consistency between the frontend, backend, and database.
+- Checking that the new features work with the previously developed modules.
+
+---
+
+#### 5. Testing and Bug Fixing
+
+The team tested the remaining Administration features.
+
+The testing activities focused on:
+
+- Verifying post moderation functionality.
+- Checking administrative dashboard information.
+- Testing database integration.
+- Checking administrator workflows.
+- Identifying and resolving issues found during testing.
+- Verifying the completed features against their acceptance criteria.
+
+---
+
+#### 6. Final Testing and Documentation
+
+The team focused on preparing the Campus Lost & Found Portal for final evaluation and handover.
+
+The planned finalization activities included:
+
+- Reviewing the completed system functionality.
+- Checking the integration of the implemented modules.
+- Updating the project README and documentation.
+- Reviewing outstanding issues and recording any unresolved items.
+- Preparing deployment and handover materials.
+- Ensuring the project is ready for final evaluation.
+
+---
+
+### Sprint 6 Deliverable
+
+By the end of Sprint 6, the remaining Administration User Stories were completed.
+
+The administrator workflow is:
+
+> **Login → Review Posts → Moderate Posts → View Dashboard → Monitor System Information**
+
+The completed Administration features extend the functionality developed during the previous sprints and complete the implementation of all 17 planned User Stories.
+
+---
+
+### Ceremonies
+
+#### Sprint Planning 6
+
+**Date:** October 9, 2026
+
+**Attendees:** Scrum Master, Product Owner, Developers (Frontend & Backend), UI/UX Designer
+
+**Outcome:**
+
+The team reviewed the unfinished Administration User Stories carried forward from Sprint 5. US-16 (Moderate Posts) and US-17 (View Dashboard) were selected for completion, with a total of 10 story points. The sprint focused on completing the remaining functionality, integration, testing, and final project preparation.
+
+---
+
+### Daily Standup Logs
+
+| Date | Key Updates | Blockers |
+| :--- | :--- | :--- |
+| **October 9, 2026** | Sprint 6 planning focused on completing US-16 and US-17. The team reviewed the remaining Administration work. | Remaining implementation and testing |
+| **October 12, 2026** | Development and integration work continued on post moderation and the administrative dashboard. | - |
+| **October 14, 2026** | The two Administration User Stories were completed, and the sprint deliverables were reviewed. |- |
+
+---
+
+### Sprint 6 Review
+
+The team demonstrated the completed Administration features to the Client Team for review. The demonstration focused on the post moderation functionality and the administrative dashboard.
+
+#### Demonstrated Functionality
+
+- Moderate Posts
+- View Dashboard
+- Integration of the Administration features with the existing system
+- Administrative access to the implemented features
+
+#### Sprint 6 Outcome
+
+Both planned User Stories were completed:
+
+- **US-16:** Moderate Posts — 5 points
+- **US-17:** View Dashboard — 5 points
+
+The completed features were demonstrated to the Client Team, allowing the team to present the Administration functionality developed during Sprint 6.
+
+---
+
+### Client Feedback
+
+### Client Feedback
+
+The Client Team reviewed the complete Campus Lost & Found Portal during the final system demonstration. The team presented the implemented functionalities, including user authentication, Lost and Found post management, item search and filtering, claim management, post moderation, and the administrative dashboard.
+
+The Client Team reviewed the system and accepted the completed application, confirming that it met the expected project requirements.
+
+The following major functional areas were demonstrated and accepted:
+
+- User Login and Logout
+- Create, Edit, and Delete Lost and Found Posts
+- Upload Item Photos and Update Post Status
+- Search Listings and Filter Items
+- View Item Details
+- Submit Claim Requests and Track Claim Status
+- Receive Claim Notifications
+- Review and Manage Claim Requests
+- Moderate Posts
+- View the Administrative Dashboard
+
+The client acceptance confirmed the successful completion of the planned system functionality. The team can proceed with the final documentation, deployment preparation, and project handover activities.
+
+---
+
+### Sprint 6 Reflection
+
+| Metric | Status |
+| :--- | :--- |
+| **Stories Planned** | 2 |
+| **Stories Completed** | 2 |
+| **Total Story Points** | 10 |
+| **Completed Story Points** | 10 |
+| **Velocity** | 10 |
+| **Completion Rate** | 100% |
+
+**Reflection:** Sprint 6 focused on completing the remaining Administration features of the Campus Lost & Found Portal. Both US-16 (Moderate Posts) and US-17 (View Dashboard) were completed, contributing 10 story points. The sprint achieved its planned development goal, and the completed features were demonstrated to the Client Team. The remaining focus is on final system verification, resolving any outstanding issues, updating project documentation, and completing deployment and handover activities.
+
+---
+
+### Completed User Stories
+
+- **US-16:** Moderate Posts — **5 points**
+- **US-17:** View Dashboard — **5 points**
+
+**Total Completed Story Points: 10**
+
+---
+
+### Sprint 6 Completion Status
+
+**Sprint Status:** Completed
+
+**Stories Planned:** 2
+
+**Stories Completed:** 2
+
+**Stories Carried Forward:** 0
+
+**Milestone:** Milestone 6 – Administration Completion & Final Handover
+
+Sprint 6 completed the remaining Administration User Stories and achieved the sprint's primary development goal. With US-16 and US-17 completed, all 17 planned User Stories have been implemented across the development sprints.
+
+---
+
+
 ### Story Point Estimates
 
 | User Story | Story Points |
