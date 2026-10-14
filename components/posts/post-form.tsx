@@ -26,71 +26,23 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { AlertCircle, ImageUp, Info, Loader2, X } from "lucide-react";
+import type { CategoryOption } from "@/lib/categories";
 import Link from "next/link";
 import { useRef, useState } from "react";
 
-const categories = [
-  {
-    label: "Select a category",
-    value: null,
-  },
-  {
-    label: "Laptop/Computer",
-    value: "laptop/computer",
-  },
-  {
-    label: "Phone",
-    value: "phone",
-  },
-  {
-    label: "Wallet/Cash",
-    value: "wallet/cash",
-  },
-  {
-    label: "Backpack/Bag",
-    value: "backpack/bag",
-  },
-  {
-    label: "Keys",
-    value: "keys",
-  },
-  {
-    label: "Headphones/Earbuds",
-    value: "headphones/earbuds",
-  },
-  {
-    label: "Watch",
-    value: "watch",
-  },
-  {
-    label: "Water Bottle",
-    value: "water-bottle",
-  },
-  {
-    label: "Clothing",
-    value: "clothing",
-  },
-  {
-    label: "Documents/ID",
-    value: "documents/id",
-  },
-  {
-    label: "Books/Notebooks",
-    value: "books/notebooks",
-  },
-  {
-    label: "Jewellery",
-    value: "jewellery",
-  },
-  {
-    label: "Other",
-    value: "other",
-  },
-];
-
 const ALLOWED_TYPES = ["image/jpeg", "image/png"];
 
-export default function PostForm({ postType }: { postType: PostType }) {
+export default function PostForm({
+  postType,
+  categoryOptions,
+}: {
+  postType: PostType;
+  categoryOptions: CategoryOption[];
+}) {
+  const categories = [
+    { label: "Select a category", value: null as string | null },
+    ...categoryOptions,
+  ];
   const dateInputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

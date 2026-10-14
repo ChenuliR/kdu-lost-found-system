@@ -5,8 +5,15 @@ import {
 import PageLayout from "@/components/page-layout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { getCategoryLabelMap } from "@/lib/categories";
 import { ArrowLeft, Check, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -33,6 +40,7 @@ export default async function ClaimDetailsPage({
   }
 
   const { post } = claim;
+  const labels = await getCategoryLabelMap();
 
   return (
     <PageLayout
@@ -60,19 +68,32 @@ export default async function ClaimDetailsPage({
                     Claim submitted {new Date(claim.createdAt).toLocaleString()}
                   </CardDescription>
                 </div>
-                <Badge variant={statusVariants[claim.status]}>{claim.status}</Badge>
+                <Badge variant={statusVariants[claim.status]}>
+                  {claim.status}
+                </Badge>
               </CardHeader>
               <CardContent className="grid gap-4 pt-6 sm:grid-cols-2">
-                <ReviewField label="Category" value={post.category} />
+                <ReviewField
+                  label="Category"
+                  value={labels[post.category] ?? post.category}
+                />
                 <ReviewField label="Item type" value={post.type} />
                 <ReviewField label="Date" value={post.date} />
                 <ReviewField label="Location" value={post.location} />
                 <div className="space-y-1 sm:col-span-2">
-                  <ReviewField label="Original description" value={post.description} />
+                  <ReviewField
+                    label="Original description"
+                    value={post.description}
+                  />
                 </div>
                 {post.image_url ? (
                   <div className="relative aspect-video overflow-hidden rounded-md bg-muted sm:col-span-2">
-                    <Image src={post.image_url} alt={post.item_name} fill className="object-cover" />
+                    <Image
+                      src={post.image_url}
+                      alt={post.item_name}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
                 ) : null}
               </CardContent>
@@ -83,8 +104,14 @@ export default async function ClaimDetailsPage({
                 <CardTitle>Claimant evidence</CardTitle>
               </CardHeader>
               <CardContent className="space-y-5">
-                <ReviewField label="Ownership proof" value={claim.proofDetails} />
-                <ReviewField label="Contact information" value={claim.contactInfo} />
+                <ReviewField
+                  label="Ownership proof"
+                  value={claim.proofDetails}
+                />
+                <ReviewField
+                  label="Contact information"
+                  value={claim.contactInfo}
+                />
               </CardContent>
             </Card>
 
@@ -100,14 +127,19 @@ export default async function ClaimDetailsPage({
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-3">
-                <Badge variant={statusVariants[claim.status]}>{claim.status}</Badge>
+                <Badge variant={statusVariants[claim.status]}>
+                  {claim.status}
+                </Badge>
                 {claim.reviewedAt ? (
                   <p className="text-sm text-muted-foreground">
                     Reviewed {new Date(claim.reviewedAt).toLocaleString()}
                   </p>
                 ) : null}
                 {claim.adminComments ? (
-                  <ReviewField label="Reviewer notes" value={claim.adminComments} />
+                  <ReviewField
+                    label="Reviewer notes"
+                    value={claim.adminComments}
+                  />
                 ) : null}
               </CardContent>
             </Card>
@@ -124,21 +156,46 @@ export default async function ClaimDetailsPage({
               <CardContent>
                 {claim.status === "Pending" ? (
                   <div className="space-y-4">
-                    <form action={updateClaimStatusByOwner} className="space-y-4">
+                    <form
+                      action={updateClaimStatusByOwner}
+                      className="space-y-4"
+                    >
                       <input type="hidden" name="claimId" value={claim.id} />
                       <input type="hidden" name="status" value="Approved" />
-                      <Textarea name="adminComments" placeholder="Optional approval notes" />
-                      <Button type="submit" className="w-full"><Check />Approve claim</Button>
+                      <Textarea
+                        name="adminComments"
+                        placeholder="Optional approval notes"
+                      />
+                      <Button type="submit" className="w-full">
+                        <Check />
+                        Approve claim
+                      </Button>
                     </form>
-                    <form action={updateClaimStatusByOwner} className="space-y-4">
+                    <form
+                      action={updateClaimStatusByOwner}
+                      className="space-y-4"
+                    >
                       <input type="hidden" name="claimId" value={claim.id} />
                       <input type="hidden" name="status" value="Rejected" />
-                      <Textarea name="adminComments" placeholder="Explain why this claim is rejected" required />
-                      <Button type="submit" variant="destructive" className="w-full"><X />Reject claim</Button>
+                      <Textarea
+                        name="adminComments"
+                        placeholder="Explain why this claim is rejected"
+                        required
+                      />
+                      <Button
+                        type="submit"
+                        variant="destructive"
+                        className="w-full"
+                      >
+                        <X />
+                        Reject claim
+                      </Button>
                     </form>
                   </div>
                 ) : (
-                  <p className="text-sm font-medium">This claim has already been reviewed.</p>
+                  <p className="text-sm font-medium">
+                    This claim has already been reviewed.
+                  </p>
                 )}
               </CardContent>
             </Card>
@@ -152,7 +209,9 @@ export default async function ClaimDetailsPage({
 function ReviewField({ label, value }: { label: string; value: string }) {
   return (
     <div className="space-y-1">
-      <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</p>
+      <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        {label}
+      </p>
       <p className="whitespace-pre-wrap text-sm">{value}</p>
     </div>
   );

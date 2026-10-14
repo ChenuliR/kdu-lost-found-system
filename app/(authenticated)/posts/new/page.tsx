@@ -1,9 +1,12 @@
 import PageLayout from "@/components/page-layout";
 import PostForm from "../../../../components/posts/post-form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getCategories } from "@/lib/categories";
 
 
-export default function PostPage() {
+export default async function PostPage() {
+  const categories = await getCategories();
+
   return (
     <PageLayout title={"Report a Lost or Found Item"}>
       <Tabs defaultValue={"lost"}>
@@ -12,10 +15,10 @@ export default function PostPage() {
           <TabsTrigger value="found">I Found Something</TabsTrigger>
         </TabsList>
         <TabsContent value="lost">
-          <PostForm postType={"lost"} />
+          <PostForm postType={"lost"} categoryOptions={categories} />
         </TabsContent>
         <TabsContent value="found">
-          <PostForm postType={"found"} />
+          <PostForm postType={"found"} categoryOptions={categories} />
         </TabsContent>
       </Tabs>
     </PageLayout>

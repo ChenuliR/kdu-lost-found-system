@@ -1,6 +1,7 @@
 import PageLayout from "@/components/page-layout";
 import PostDetail from "@/components/posts/post-detail";
 import { getAuthUser } from "@/lib/auth/server";
+import { getCategories } from "@/lib/categories";
 import { createSupabaseServerClient } from "@/lib/supabase/server-client";
 import { notFound } from "next/navigation";
 
@@ -12,6 +13,7 @@ export default async function PostDetailsPage({
   const { id } = await params;
   const supabase = await createSupabaseServerClient();
   const user = await getAuthUser();
+  const categories = await getCategories();
 
   const { data: post, error } = await supabase
     .from("posts")
@@ -45,6 +47,7 @@ export default async function PostDetailsPage({
         user={user}
         claims={claims ?? []}
         comments={comments ?? []}
+        categories={categories}
       />
     </PageLayout>
   );

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAuthUser } from "@/lib/auth/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server-client";
+import { getCategoryLabelMap } from "@/lib/categories";
 import { ArrowLeft, MapPin } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -88,6 +89,8 @@ export default async function ClaimPage({ params }: ClaimPageProps) {
   const claimTypeLabel =
     post.type === "lost" ? "Found Item Claim" : "Lost Item Claim";
 
+  const labels = await getCategoryLabelMap();
+
   return (
     <PageLayout title={claimTypeLabel}>
       <div className="mx-auto max-w-2xl space-y-6">
@@ -99,12 +102,6 @@ export default async function ClaimPage({ params }: ClaimPageProps) {
           Back to Item
         </Link>
 
-        {/* <div className="rounded-lg border border-gray-200 bg-primary-background p-4">
-          <h3 className="font-semibold text-gray-900">{post.item_name}</h3>
-          <p className="mt-1 text-sm text-gray-600">
-            {post.category} • {post.location}
-          </p>
-        </div> */}
         <Card className="rounded-sm">
           <CardHeader className="space-y-2">
             <CardTitle className="font-semibold">{post.item_name}</CardTitle>
@@ -112,7 +109,7 @@ export default async function ClaimPage({ params }: ClaimPageProps) {
               <div className="space-y-1">
                 <h4 className="text-xs/snug font-medium">Category</h4>
                 <Badge className="text-muted-foreground" variant={"outline"}>
-                  {post.category}
+                  {labels[post.category] ?? post.category}
                 </Badge>
               </div>
               <div className="space-y-1">
@@ -127,7 +124,7 @@ export default async function ClaimPage({ params }: ClaimPageProps) {
         </Card>
 
         {/* <div className="rounded-lg border border-gray-200 bg-white p-6"> */}
-          <ClaimForm postId={postId} itemName={post.item_name} />
+        <ClaimForm postId={postId} itemName={post.item_name} />
         {/* </div> */}
       </div>
     </PageLayout>

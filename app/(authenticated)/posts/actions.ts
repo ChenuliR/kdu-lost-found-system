@@ -7,6 +7,20 @@ import { redirect } from "next/navigation";
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png"];
 
+async function isActiveCategory(
+  supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>,
+  slug: string,
+) {
+  const { data } = await supabase
+    .from("categories")
+    .select("slug")
+    .eq("slug", slug)
+    .eq("active", true)
+    .maybeSingle();
+
+  return !!data;
+}
+
 export async function createPost(
   formData: FormData,
   postType: "lost" | "found",
@@ -31,6 +45,10 @@ export async function createPost(
     !imageFile
   ) {
     throw new Error("All required fields must be filled");
+  }
+
+  if (!(await isActiveCategory(supabase, category))) {
+    throw new Error("Please select a valid category");
   }
 
   let imageUrl: string | null = null;
@@ -102,6 +120,20 @@ export async function updatePost(formData: FormData) {
     !description
   ) {
     throw new Error("All required fields must be filled");
+  }
+
+  const { data: current } = await supabase
+    .from("posts")
+    .select("category")
+    .eq("id", postId)
+    .eq("user_id", user.id)
+    .single();
+
+  if (
+    category !== current?.category &&
+    !(await isActiveCategory(supabase, category))
+  ) {
+    throw new Error("Please select a valid category");
   }
 
   const updates: {
@@ -239,4 +271,41 @@ export async function getAllPosts(type?: PostType) {
   }
 
   return posts;
+}
+
+const REPORT_REASONS = ["Duplicate", "Inappropriate", "Spam", "Other"];
+
+export async function reportPost(formData: FormData) {
+  const supabase = await createSupabaseServerClient();
+  const user = await getAuthUser();
+  const postId = formData.get("postId");
+  const reason = formData.get("reason");
+  const details = String(formData.get("details") ?? "").trim();
+
+  if (
+    typeof postId !== "string" ||
+    !postId ||
+    typeof reason !== "string" ||
+    !REPORT_REASONS.includes(reason)
+  ) {
+    return { error: "Please select a reason" };
+  }
+
+  const { error } = await supabase.from("post_reports").insert({
+    post_id: postId,
+    reporter_id: user.id,
+    reason,
+    details: details || null,
+  });
+
+  if (error) {
+    return {
+      error:
+        error.code === "23505"
+          ? "You already reported this post"
+          : "Failed to submit report",
+    };
+  }
+
+  return { success: true };
 }

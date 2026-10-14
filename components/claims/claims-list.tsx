@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useCategoryLabel } from "@/components/category-labels-provider";
 import { AlertCircle, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
@@ -82,6 +83,8 @@ const formatClaimAge = (date: Date) => {
 };
 
 export function ClaimsList({ claims }: ClaimsListProps) {
+  const categoryLabel = useCategoryLabel();
+
   if (claims.length === 0) {
     return (
       <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-8 text-center">
@@ -120,7 +123,9 @@ export function ClaimsList({ claims }: ClaimsListProps) {
                   </div>
                   <CardDescription className="mt-1 flex items-center gap-2">
                     {claimTypeLabel(itemPost.type)}
-                    <Badge variant={"outline"}>{itemPost.category}</Badge>
+                    <Badge variant={"outline"}>
+                      {categoryLabel(itemPost.category)}
+                    </Badge>
                   </CardDescription>
                 </div>
               </div>
