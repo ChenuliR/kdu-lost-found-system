@@ -1,23 +1,13 @@
+import {
+  getAdminStats,
+  getFlaggedPosts,
+} from "@/app/(authenticated)/admin/actions";
 import { getAdminClaims } from "@/app/(authenticated)/claims/actions";
 import AdminModeration from "@/components/admin-moderation";
 import PageLayout from "@/components/page-layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Bell,
-  CheckCircle2,
-  CircleAlert,
-  MoreVertical,
-  Plus,
-  Search,
-  ShieldCheck,
-  Sparkles,
-  Trash2,
-  TrendingUp,
-  Trophy,
-} from "lucide-react";
+import { CheckCircle2, Sparkles, TrendingUp, Trophy } from "lucide-react";
 import Link from "next/link";
 
 type Claim = {
@@ -28,29 +18,30 @@ type Claim = {
   createdAt: string;
 };
 
-const flaggedPosts = [
-  {
-    item: "Blue Hydroflask Water Bottle",
-    reason: "Suspected Duplicate",
-    detail: "Reported by Auto-Mod • ID #8892",
-    alert: true,
-  },
-  {
-    item: "Physics 101 Textbook",
-    reason: "Expired (>30 Days)",
-    detail: "System Check • ID #8104",
-    alert: false,
-  },
-  {
-    item: "Umbrella - Black",
-    reason: "Expired (>30 Days)",
-    detail: "System Check • ID #7942",
-    alert: false,
-  },
-];
+const PAGE_SIZE = 10;
+const STATUS_FILTERS = ["Pending", "Approved", "Rejected", "All"] as const;
+type StatusFilter = (typeof STATUS_FILTERS)[number];
 
-export default async function AdminDashboardPage() {
-  const claims = (await getAdminClaims()) as Claim[];
+export default async function AdminDashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ status?: string; page?: string }>;
+}) {
+  const { status: statusParam, page: pageParam } = await searchParams;
+  const status: StatusFilter = STATUS_FILTERS.includes(
+    statusParam as StatusFilter,
+  )
+    ? (statusParam as StatusFilter)
+    : "Pending";
+  const page = Math.max(1, Number(pageParam) || 1);
+
+  const [claimsResult, stats, flagged] = await Promise.all([
+    getAdminClaims({ status, page, pageSize: PAGE_SIZE }),
+    getAdminStats(),
+    getFlaggedPosts(),
+  ]);
+  const claims = claimsResult.claims as Claim[];
+  const totalPages = Math.max(1, Math.ceil(claimsResult.total / PAGE_SIZE));
 
   return (
     <PageLayout
@@ -58,84 +49,63 @@ export default async function AdminDashboardPage() {
       subtitle="Keep the campus lost-and-found moving smoothly."
     >
       <div className="space-y-8">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b pb-4">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              aria-label="Go back"
-              nativeButton={false}
-              render={<Link href="/" />}
-            >
-              <ArrowLeft />
-            </Button>
-            <span className="font-semibold text-foreground">
-              Campus L&amp;F
-            </span>
-            <span className="hidden sm:inline">/ Administration</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              size="sm"
-              nativeButton={false}
-              render={<Link href="/posts/new" />}
-            >
-              <Plus />
-              New Post
-            </Button>
-            <Button variant="ghost" size="icon-sm" aria-label="Search">
-              <Search />
-            </Button>
-            <Button variant="ghost" size="icon-sm" aria-label="Notifications">
-              <Bell />
-            </Button>
-            <Button variant="outline" size="icon-sm" aria-label="Admin account">
-              <ShieldCheck />
-            </Button>
-          </div>
-        </div>
-
         <section
           className="grid gap-4 md:grid-cols-3"
           aria-label="Dashboard summary"
         >
           <MetricCard
             label="Active Posts"
-            value="1,284"
+            value={stats.activePosts.toLocaleString()}
             icon={<TrendingUp />}
-            detail="12% from last month"
+            detail="Currently listed"
           />
           <MetricCard
             label="Pending Claims"
-            value="42"
+            value={String(stats.pendingClaims)}
             icon={<Trophy />}
             detail="Needs verification"
             emphasis
           />
           <MetricCard
             label="Resolved Cases"
-            value="891"
+            value={stats.resolvedCases.toLocaleString()}
             icon={<CheckCircle2 />}
-            detail="This semester"
+            detail="Approved claims"
           />
         </section>
 
         <div className="grid gap-8 xl:grid-cols-[minmax(0,1.45fr)_minmax(280px,0.85fr)]">
-          <Card>
-            <CardHeader className="flex-row items-center justify-between border-b">
-              <div>
-                <CardTitle>Claims Awaiting Verification</CardTitle>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Review ownership evidence before approving a claim.
-                </p>
-              </div>
-              <span className="rounded-full bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground">
-                Action Required
-              </span>
+          <Card className="flex h-[36rem] flex-col gap-0 pb-0">
+            <CardHeader className="shrink-0 border-b">
+              <CardTitle>Claims</CardTitle>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Review ownership evidence before approving a claim.
+              </p>
             </CardHeader>
-            <CardContent className="gap-0 p-0">
+
+            <div className="flex shrink-0 flex-wrap gap-2 border-b p-3">
+              {STATUS_FILTERS.map((s) => (
+                <Button
+                  key={s}
+                  size="sm"
+                  variant={s === status ? "default" : "outline"}
+                  nativeButton={false}
+                  render={<Link href={`/admin?status=${s}`} />}
+                >
+                  {s}
+                </Button>
+              ))}
+            </div>
+
+            <CardContent className="min-h-0 flex-1 gap-0 overflow-y-auto p-0">
               {claims.length === 0 ? (
-                <EmptyState message="All claims have been reviewed." />
+                <EmptyState
+                  message={
+                    status === "Pending"
+                      ? "All claims have been reviewed."
+                      : "No claims match this filter."
+                  }
+                />
               ) : (
                 claims.map((claim) => (
                   <div
@@ -149,7 +119,8 @@ export default async function AdminDashboardPage() {
                       <div className="min-w-0">
                         <p className="truncate font-medium">{claim.item}</p>
                         <p className="text-sm text-muted-foreground">
-                          Claimed by {claim.claimant.slice(0, 8)} • {new Date(claim.createdAt).toLocaleDateString()}
+                          Claimed by {claim.claimant.slice(0, 8)} •{" "}
+                          {new Date(claim.createdAt).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
@@ -178,9 +149,47 @@ export default async function AdminDashboardPage() {
                 ))
               )}
             </CardContent>
+
+            {totalPages > 1 && (
+              <div className="flex shrink-0 items-center justify-between border-t p-3 text-sm text-muted-foreground">
+                <span>
+                  Page {page} of {totalPages}
+                </span>
+                <div className="flex gap-2">
+                  {page > 1 && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      nativeButton={false}
+                      render={
+                        <Link
+                          href={`/admin?status=${status}&page=${page - 1}`}
+                        />
+                      }
+                    >
+                      Previous
+                    </Button>
+                  )}
+                  {page < totalPages && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      nativeButton={false}
+                      render={
+                        <Link
+                          href={`/admin?status=${status}&page=${page + 1}`}
+                        />
+                      }
+                    >
+                      Next
+                    </Button>
+                  )}
+                </div>
+              </div>
+            )}
           </Card>
 
-          <AdminModeration />
+          <AdminModeration posts={flagged.slice(0, 5)} total={flagged.length} />
         </div>
       </div>
     </PageLayout>

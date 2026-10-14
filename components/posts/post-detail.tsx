@@ -1,9 +1,10 @@
 "use client";
 
 import { createComment, updatePost } from "@/app/(authenticated)/posts/actions";
-import { submitClaim } from "@/app/(authenticated)/claims/actions";
 import DeleteModal from "@/components/delete-modal";
 import ImageModal from "@/components/image-modal";
+import ReportPost from "@/components/posts/report-post";
+import { useCategoryLabel } from "@/components/category-labels-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,7 +14,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Field, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -24,29 +24,23 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
 import { User } from "@supabase/supabase-js";
-import { Bell, Calendar, Check, Clock3, KeyRound, Loader2, MapPin, ShieldCheck } from "lucide-react";
+import {
+  Bell,
+  Calendar,
+  Check,
+  Clock3,
+  KeyRound,
+  Loader2,
+  MapPin,
+  ShieldCheck,
+} from "lucide-react";
 import Image from "next/image";
-import { useActionState } from "react";
 import Link from "next/link";
-
-const categories = [
-  ["Laptop/Computer", "laptop/computer"],
-  ["Phone", "phone"],
-  ["Wallet/Cash", "wallet/cash"],
-  ["Backpack/Bag", "backpack/bag"],
-  ["Keys", "keys"],
-  ["Headphones/Earbuds", "headphones/earbuds"],
-  ["Watch", "watch"],
-  ["Water Bottle", "water-bottle"],
-  ["Clothing", "clothing"],
-  ["Documents/ID", "documents/id"],
-  ["Books/Notebooks", "books/notebooks"],
-  ["Jewellery", "jewellery"],
-  ["Other", "other"],
-] as const;
+import { useActionState } from "react";
+import type { CategoryOption } from "@/lib/categories";
 
 type PostClaim = {
   id: string;
@@ -68,18 +62,29 @@ export default function PostDetail({
   user,
   claims,
   comments,
+  categories,
 }: {
   post: any;
   user: User;
   claims: PostClaim[];
   comments: PostComment[];
+  categories: CategoryOption[];
 }) {
+  const categoryLabel = useCategoryLabel();
   const [state, formAction, isPending] = useActionState(
     async (prevState: any, formData: FormData) => {
       return await updatePost(formData);
     },
     null,
   );
+
+  // keep a post's current category selectable even if it was deactivated
+  const categoryOptions = categories.some((c) => c.value === post.category)
+    ? categories
+    : [
+        ...categories,
+        { label: categoryLabel(post.category), value: post.category },
+      ];
 
   return (
     <>
@@ -90,6 +95,7 @@ export default function PostDetail({
             {post.status ?? "Active"}
           </Badge>
           <Badge>{post.type}</Badge>
+          {post.user_id !== user.id && <ReportPost postId={post.id} />}
         </div>
       </div>
       <section className="flex gap-4">
@@ -121,7 +127,7 @@ export default function PostDetail({
                 <div className="space-y-1">
                   <h4 className="text-xs/snug font-medium">Category</h4>
                   <Badge className="text-muted-foreground" variant={"outline"}>
-                    {post.category}
+                    {categoryLabel(post.category)}
                   </Badge>
                 </div>
                 <div className="space-y-1">
@@ -167,19 +173,30 @@ export default function PostDetail({
                 <div className="space-y-3">
                   {comments.map((comment) => (
                     <div key={comment.id} className="rounded-md border p-3">
-                      <p className="whitespace-pre-wrap text-sm">{comment.content}</p>
+                      <p className="whitespace-pre-wrap text-sm">
+                        {comment.content}
+                      </p>
                       <p className="mt-2 text-xs text-muted-foreground">
-                        {comment.author_id === user.id ? "You" : `User ${comment.author_id.slice(0, 8)}`} · {new Date(comment.created_at).toLocaleString()}
+                        {comment.author_id === user.id
+                          ? "You"
+                          : `User ${comment.author_id.slice(0, 8)}`}{" "}
+                        · {new Date(comment.created_at).toLocaleString()}
                       </p>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground">No comments yet.</p>
+                <p className="text-sm text-muted-foreground">
+                  No comments yet.
+                </p>
               )}
               <form action={createComment} className="space-y-3 border-t pt-4">
                 <input type="hidden" name="postId" value={post.id} />
-                <Textarea name="content" placeholder="Write a comment" required />
+                <Textarea
+                  name="content"
+                  placeholder="Write a comment"
+                  required
+                />
                 <Button type="submit">Post comment</Button>
               </form>
             </CardContent>
@@ -192,9 +209,13 @@ export default function PostDetail({
                     <TabsTrigger value="notifications" className="flex-1 gap-2">
                       <Bell />
                       Notifications
-                      {claims.filter((claim) => claim.status === "Pending").length > 0 && (
+                      {claims.filter((claim) => claim.status === "Pending")
+                        .length > 0 && (
                         <Badge variant="destructive">
-                          {claims.filter((claim) => claim.status === "Pending").length}
+                          {
+                            claims.filter((claim) => claim.status === "Pending")
+                              .length
+                          }
                         </Badge>
                       )}
                     </TabsTrigger>
@@ -218,7 +239,8 @@ export default function PostDetail({
                           <div className="flex items-start justify-between gap-3">
                             <div className="min-w-0">
                               <p className="font-medium">
-                                Claim request from {claim.claimant_id.slice(0, 8)}
+                                Claim request from{" "}
+                                {claim.claimant_id.slice(0, 8)}
                               </p>
                               <p className="mt-1 line-clamp-2 text-muted-foreground">
                                 {claim.proof_details}
@@ -243,12 +265,16 @@ export default function PostDetail({
                           <Button
                             className="mt-3 w-full"
                             size="sm"
-                            variant={claim.status === "Pending" ? "default" : "outline"}
+                            variant={
+                              claim.status === "Pending" ? "default" : "outline"
+                            }
                             nativeButton={false}
                             render={<Link href={`/claims/${claim.id}`} />}
                           >
                             {claim.status === "Pending" ? <Check /> : <Bell />}
-                            {claim.status === "Pending" ? "Review claim" : "View claim"}
+                            {claim.status === "Pending"
+                              ? "Review claim"
+                              : "View claim"}
                           </Button>
                         </div>
                       ))}
@@ -257,107 +283,107 @@ export default function PostDetail({
                 </TabsContent>
                 <TabsContent value="manage" className="px-6 pb-6">
                   <div className="grid grid-cols-2 items-start gap-3">
-                  <details>
-                    <summary
-                      aria-disabled={isPending}
-                      onClick={(e) => {
-                        if (isPending) e.preventDefault();
-                      }}
-                      className={`flex h-9 w-full list-none items-center justify-center rounded-md px-2.5 text-sm font-medium transition-colors ${
-                        isPending
-                          ? "cursor-not-allowed bg-primary text-primary-foreground"
-                          : "cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90"
-                      }`}
-                    >
-                      Edit post
-                    </summary>
-                    <form
-                      action={formAction}
-                      className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2"
-                    >
-                      <input type="hidden" name="postId" value={post.id} />
-                      <label className="grid gap-1 text-sm">
-                        Item name
-                        <Input
-                          name="itemName"
-                          defaultValue={post.item_name}
-                          required
-                        />
-                      </label>
-                      <label className="grid gap-1 text-sm">
-                        Category
-                        <Select
-                          name="category"
-                          defaultValue={post.category}
-                          required
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent
-                            side="bottom"
-                            collisionAvoidance={{
-                              side: "shift",
-                              align: "shift",
-                              fallbackAxisSide: "none",
-                            }}
-                          >
-                            <SelectGroup>
-                              {categories.map(([label, value]) => (
-                                <SelectItem key={value} value={value}>
-                                  {label}
-                                </SelectItem>
-                              ))}
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </label>
-                      <label className="grid gap-1 text-sm">
-                        Date
-                        <Input
-                          type="date"
-                          name="date"
-                          defaultValue={post.date}
-                          required
-                        />
-                      </label>
-                      <label className="grid gap-1 text-sm">
-                        Location
-                        <Input
-                          name="location"
-                          defaultValue={post.location}
-                          required
-                        />
-                      </label>
-                      <label className="grid gap-1 text-sm md:col-span-2">
-                        Description
-                        <Textarea
-                          name="description"
-                          defaultValue={post.description}
-                          required
-                        />
-                      </label>
-                      <label className="grid gap-1 text-sm md:col-span-2">
-                        Replace image
-                        <Input
-                          type="file"
-                          name="image"
-                          accept="image/jpeg,image/png"
-                        />
-                      </label>
-                      <Button
-                        type="submit"
-                        className="w-fit md:col-span-2 cursor-pointer"
-                        disabled={isPending}
+                    <details>
+                      <summary
+                        aria-disabled={isPending}
+                        onClick={(e) => {
+                          if (isPending) e.preventDefault();
+                        }}
+                        className={`flex h-9 w-full list-none items-center justify-center rounded-md px-2.5 text-sm font-medium transition-colors ${
+                          isPending
+                            ? "cursor-not-allowed bg-primary text-primary-foreground"
+                            : "cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90"
+                        }`}
                       >
-                        {isPending && (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        )}
-                        {isPending ? "Saving..." : "Save changes"}
-                      </Button>
-                    </form>
-                  </details>
-                  <DeleteModal id={post.id} disabled={isPending} />
+                        Edit post
+                      </summary>
+                      <form
+                        action={formAction}
+                        className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2"
+                      >
+                        <input type="hidden" name="postId" value={post.id} />
+                        <label className="grid gap-1 text-sm">
+                          Item name
+                          <Input
+                            name="itemName"
+                            defaultValue={post.item_name}
+                            required
+                          />
+                        </label>
+                        <label className="grid gap-1 text-sm">
+                          Category
+                          <Select
+                            name="category"
+                            defaultValue={categoryLabel(post.category)}
+                            required
+                          >
+                            <SelectTrigger className="w-full">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent
+                              side="bottom"
+                              collisionAvoidance={{
+                                side: "shift",
+                                align: "shift",
+                                fallbackAxisSide: "none",
+                              }}
+                            >
+                              <SelectGroup>
+                                {categoryOptions.map(({ label, value }) => (
+                                  <SelectItem key={value} value={value}>
+                                    {label}
+                                  </SelectItem>
+                                ))}
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                        </label>
+                        <label className="grid gap-1 text-sm">
+                          Date
+                          <Input
+                            type="date"
+                            name="date"
+                            defaultValue={post.date}
+                            required
+                          />
+                        </label>
+                        <label className="grid gap-1 text-sm">
+                          Location
+                          <Input
+                            name="location"
+                            defaultValue={post.location}
+                            required
+                          />
+                        </label>
+                        <label className="grid gap-1 text-sm md:col-span-2">
+                          Description
+                          <Textarea
+                            name="description"
+                            defaultValue={post.description}
+                            required
+                          />
+                        </label>
+                        <label className="grid gap-1 text-sm md:col-span-2">
+                          Replace image
+                          <Input
+                            type="file"
+                            name="image"
+                            accept="image/jpeg,image/png"
+                          />
+                        </label>
+                        <Button
+                          type="submit"
+                          className="w-fit md:col-span-2 cursor-pointer"
+                          disabled={isPending}
+                        >
+                          {isPending && (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          )}
+                          {isPending ? "Saving..." : "Save changes"}
+                        </Button>
+                      </form>
+                    </details>
+                    <DeleteModal id={post.id} disabled={isPending} />
                   </div>
                 </TabsContent>
               </Tabs>

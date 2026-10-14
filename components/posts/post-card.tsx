@@ -2,8 +2,11 @@ import { Calendar } from "lucide-react";
 import Image from "next/image";
 import { Badge } from "../ui/badge";
 import { Separator } from "../ui/separator";
+import { useCategoryLabel } from "@/components/category-labels-provider";
 
 export default function PostCard({ post }: { post: any }) {
+  const categoryLabel = useCategoryLabel();
+
   return (
     <div className="dark:bg-muted-foreground/10 dark:hover:bg-muted-foreground/15 rounded-sm shadow overflow-hidden hover:shadow-lg transition-all border-2 border-primary-foreground line-clamp-2 leading-[1.7rem] flex flex-col h-full">
       {/* Image Container */}
@@ -55,7 +58,7 @@ export default function PostCard({ post }: { post: any }) {
               variant={"outline"}
               className="text-primary/70 border-primary-background"
             >
-              {post.category}
+              {categoryLabel(post.category)}
             </Badge>
           </div>
         </div>

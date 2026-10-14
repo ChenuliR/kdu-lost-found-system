@@ -1,80 +1,123 @@
 "use client";
 
+import { dismissReport, removePost } from "@/app/(authenticated)/admin/actions";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CircleAlert, MoreVertical, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { CircleAlert, Trash2, X } from "lucide-react";
+import Link from "next/link";
 
-const flaggedPosts = [
-  {
-    item: "Blue Hydroflask Water Bottle",
-    reason: "Suspected Duplicate",
-    detail: "Reported by Auto-Mod • ID #8892",
-    alert: true,
-  },
-  {
-    item: "Physics 101 Textbook",
-    reason: "Expired (>30 Days)",
-    detail: "System Check • ID #8104",
-    alert: false,
-  },
-  {
-    item: "Umbrella - Black",
-    reason: "Expired (>30 Days)",
-    detail: "System Check • ID #7942",
-    alert: false,
-  },
-];
+export type FlaggedPost = {
+  key: string;
+  postId: string;
+  reportId: string | null;
+  item: string;
+  reason: string;
+  detail: string;
+  alert: boolean;
+};
 
-export default function AdminModeration() {
-  const [removedPosts, setRemovedPosts] = useState<string[]>([]);
-
+export default function AdminModeration({
+  posts,
+  total,
+  fixedHeight = true,
+}: {
+  posts: FlaggedPost[];
+  total: number;
+  fixedHeight?: boolean;
+}) {
   return (
-    <Card>
-      <CardHeader className="flex-row items-center justify-between border-b">
+    <Card
+      className={`flex flex-col gap-0 pb-0 ${fixedHeight ? "h-[36rem]" : ""}`}
+    >
+      <CardHeader className="shrink-0 border-b">
         <CardTitle>Post Moderation</CardTitle>
-        <Button variant="ghost" size="icon-sm" aria-label="More moderation options">
-          <MoreVertical />
-        </Button>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Reported posts and listings older than 30 days.
+        </p>
       </CardHeader>
-      <CardContent className="gap-3 p-4">
-        {flaggedPosts
-          .filter((post) => !removedPosts.includes(post.item))
-          .map((post) => (
-            <div key={post.item} className="rounded-lg border bg-muted/20 p-3">
-              <div className="flex items-start justify-between gap-3">
-                <p className="text-sm font-semibold">{post.item}</p>
-                <Button
-                  variant="ghost"
-                  size="icon-xs"
-                  aria-label={`Remove ${post.item}`}
-                  onClick={() =>
-                    setRemovedPosts((current) => [...current, post.item])
-                  }
-                >
-                  <Trash2 />
-                </Button>
-              </div>
-              <p
-                className={`mt-2 flex items-center gap-1 text-xs font-medium ${post.alert ? "text-destructive" : "text-muted-foreground"}`}
-              >
-                {post.alert ? (
-                  <CircleAlert />
-                ) : (
-                  <span className="size-1.5 rounded-full bg-muted-foreground" />
-                )}
-                Flagged: {post.reason}
-              </p>
-              <p className="mt-1 text-xs text-muted-foreground">{post.detail}</p>
-            </div>
-          ))}
-        {removedPosts.length === flaggedPosts.length && (
-          <p className="text-sm text-muted-foreground">No flagged posts remain.</p>
+
+      <CardContent className="min-h-0 flex-1 gap-3 overflow-y-auto p-4">
+        {posts.length === 0 && (
+          <p className="py-6 text-center text-sm text-muted-foreground">
+            No flagged posts.
+          </p>
         )}
-        <Button variant="ghost" className="mt-1 w-full justify-center text-sm">
-          View All Flagged Posts
-        </Button>
+        {posts.map((post) => (
+          <div key={post.key} className="rounded-lg border bg-muted/20 p-3">
+            <div className="flex items-start justify-between gap-3">
+              <Link
+                href={`/posts/${post.postId}`}
+                className="text-sm font-semibold hover:underline"
+              >
+                {post.item}
+              </Link>
+              <div className="flex shrink-0 gap-1">
+                {post.reportId && (
+                  <form action={dismissReport}>
+                    <input
+                      type="hidden"
+                      name="reportId"
+                      value={post.reportId}
+                    />
+                    <Button
+                      type="submit"
+                      variant="ghost"
+                      size="icon-xs"
+                      aria-label={`Dismiss report for ${post.item}`}
+                    >
+                      <X />
+                    </Button>
+                  </form>
+                )}
+                <form
+                  action={removePost}
+                  onSubmit={(e) => {
+                    if (!confirm("Permanently remove this post?")) {
+                      e.preventDefault();
+                    }
+                  }}
+                >
+                  <input type="hidden" name="postId" value={post.postId} />
+                  <Button
+                    type="submit"
+                    variant="ghost"
+                    size="icon-xs"
+                    aria-label={`Remove ${post.item}`}
+                  >
+                    <Trash2 />
+                  </Button>
+                </form>
+              </div>
+            </div>
+            <p
+              className={`mt-2 flex items-center gap-1 text-xs font-medium ${
+                post.alert ? "text-destructive" : "text-muted-foreground"
+              }`}
+            >
+              {post.alert ? (
+                <CircleAlert className="size-3" />
+              ) : (
+                <span className="size-1.5 rounded-full bg-muted-foreground" />
+              )}
+              {post.reason}
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">{post.detail}</p>
+          </div>
+        ))}
       </CardContent>
+
+      {total > posts.length && (
+        <div className="shrink-0 border-t p-2">
+          <Button
+            variant="ghost"
+            className="w-full justify-center text-sm"
+            nativeButton={false}
+            render={<Link href="/admin/moderation" />}
+          >
+            View all {total} flagged posts
+          </Button>
+        </div>
+      )}
     </Card>
   );
 }

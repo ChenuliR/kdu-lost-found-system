@@ -13,6 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { getCategoryLabelMap } from "@/lib/categories";
 import { ArrowLeft, Check, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -42,6 +43,8 @@ export default async function AdminClaimReviewPage({
   if (!claim.post) {
     notFound();
   }
+
+  const labels = await getCategoryLabelMap();
 
   return (
     <PageLayout
@@ -74,7 +77,10 @@ export default async function AdminClaimReviewPage({
                 </Badge>
               </CardHeader>
               <CardContent className="grid gap-4 pt-6 sm:grid-cols-2">
-                <ReviewField label="Category" value={claim.post.category} />
+                <ReviewField
+                  label="Category"
+                  value={labels[claim.post.category] ?? claim.post.category}
+                />
                 <ReviewField label="Item type" value={claim.post.type} />
                 <ReviewField label="Date" value={claim.post.date} />
                 <ReviewField label="Location" value={claim.post.location} />
@@ -107,8 +113,14 @@ export default async function AdminClaimReviewPage({
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-5">
-                <ReviewText label="Ownership proof" value={claim.proofDetails} />
-                <ReviewText label="Contact information" value={claim.contactInfo} />
+                <ReviewText
+                  label="Ownership proof"
+                  value={claim.proofDetails}
+                />
+                <ReviewText
+                  label="Contact information"
+                  value={claim.contactInfo}
+                />
               </CardContent>
             </Card>
           </div>
@@ -145,7 +157,11 @@ export default async function AdminClaimReviewPage({
                       aria-label="Rejection reason"
                       required
                     />
-                    <Button type="submit" variant="destructive" className="w-full">
+                    <Button
+                      type="submit"
+                      variant="destructive"
+                      className="w-full"
+                    >
                       <X />
                       Reject claim
                     </Button>
@@ -153,9 +169,14 @@ export default async function AdminClaimReviewPage({
                 </div>
               ) : (
                 <div className="space-y-3 text-sm">
-                  <p className="font-medium">This claim has already been reviewed.</p>
+                  <p className="font-medium">
+                    This claim has already been reviewed.
+                  </p>
                   {claim.adminComments ? (
-                    <ReviewText label="Admin notes" value={claim.adminComments} />
+                    <ReviewText
+                      label="Admin notes"
+                      value={claim.adminComments}
+                    />
                   ) : null}
                   {claim.reviewedAt ? (
                     <p className="text-muted-foreground">

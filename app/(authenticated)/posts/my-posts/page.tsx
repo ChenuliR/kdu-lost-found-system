@@ -2,9 +2,11 @@ import PageLayout from "@/components/page-layout";
 import PostFilter from "@/components/posts/post-filter";
 import { Badge } from "@/components/ui/badge";
 import { getUserPosts } from "../actions";
+import { getCategories } from "@/lib/categories";
 
 export default async function MyPostsPage() {
   const userPosts = await getUserPosts();
+    const categories = await getCategories({ includeInactive: true });
 
   return (
     <PageLayout
@@ -19,7 +21,7 @@ export default async function MyPostsPage() {
       }
       separator={true}
     >
-      <PostFilter posts={userPosts} />
+      <PostFilter posts={userPosts} categories={categories} />
     </PageLayout>
   );
 }

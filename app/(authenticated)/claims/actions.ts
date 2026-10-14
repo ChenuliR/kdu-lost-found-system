@@ -1,12 +1,15 @@
-"use server"
+"use server";
 
-import { getAuthUser } from "@/lib/auth/server";
+import { getAuthUser, requireAdmin } from "@/lib/auth/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server-client";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 type ClaimStatus = "Pending" | "Approved" | "Rejected";
 
-function isNotificationsTableMissing(error: { code?: string; message?: string } | null | undefined) {
+function isNotificationsTableMissing(
+  error: { code?: string; message?: string } | null | undefined,
+) {
   const message = error?.message?.toLowerCase() || "";
 
   return (
@@ -68,7 +71,7 @@ export async function submitClaim(
     // Check if post exists
     const { data: post, error: postError } = await supabase
       .from("posts")
-      .select("id, user_id")
+      .select("id, user_id, status")
       .eq("id", postId)
       .single();
 
@@ -78,6 +81,10 @@ export async function submitClaim(
 
     if (post.user_id === user.id) {
       return { error: "You cannot claim your own post" };
+    }
+
+    if (post.status && post.status !== "Active") {
+      return { error: "This item is no longer available to claim" };
     }
 
     // Check if user already has a claim on this post
@@ -185,54 +192,69 @@ export async function getUserClaims() {
   }
 }
 
-export async function getAdminClaims() {
+export async function getAdminClaims({
+  status = "Pending",
+  page = 1,
+  pageSize = 10,
+}: {
+  status?: ClaimStatus | "All";
+  page?: number;
+  pageSize?: number;
+} = {}) {
+  await requireAdmin();
   const supabase = await createSupabaseServerClient();
-  const user = await getAuthUser();
+  const from = (page - 1) * pageSize;
 
-  if (!user) {
-    return [];
-  }
-
-  const { data: claims, error } = await supabase
-    .from("claims")
-    .select(
-      `
+  let query = supabase.from("claims").select(
+    `
       id,
       status,
       created_at,
       posts:post_id (item_name),
       claimant_id
     `,
-    )
-    .order("created_at", { ascending: false });
+    { count: "exact" },
+  );
+
+  if (status !== "All") {
+    query = query.eq("status", status);
+  }
+
+  const {
+    data: claims,
+    count,
+    error,
+  } = await query
+    .order("created_at", { ascending: false })
+    .range(from, from + pageSize - 1);
 
   if (error) {
     throw new Error("Failed to fetch admin claims");
   }
 
-  return (claims || []).map((claim) => {
-    const post = claim.posts as
-      | { item_name: string }
-      | { item_name: string }[]
-      | null;
+  return {
+    total: count ?? 0,
+    claims: (claims || []).map((claim) => {
+      const post = claim.posts as
+        | { item_name: string }
+        | { item_name: string }[]
+        | null;
 
-    return {
-      id: claim.id,
-      status: claim.status as ClaimStatus,
-      createdAt: claim.created_at,
-      item: (Array.isArray(post) ? post[0] : post)?.item_name ?? "Unknown item",
-      claimant: claim.claimant_id,
-    };
-  });
+      return {
+        id: claim.id,
+        status: claim.status as ClaimStatus,
+        createdAt: claim.created_at,
+        item:
+          (Array.isArray(post) ? post[0] : post)?.item_name ?? "Unknown item",
+        claimant: claim.claimant_id,
+      };
+    }),
+  };
 }
 
 export async function getAdminClaimById(id: string) {
+  await requireAdmin();
   const supabase = await createSupabaseServerClient();
-  const user = await getAuthUser();
-
-  if (!user) {
-    throw new Error("Unauthorized");
-  }
 
   const { data: claim, error } = await supabase
     .from("claims")
@@ -290,12 +312,8 @@ export async function getAdminClaimById(id: string) {
 }
 
 export async function updateClaimStatus(formData: FormData) {
+  await requireAdmin();
   const supabase = await createSupabaseServerClient();
-  const user = await getAuthUser();
-
-  if (!user) {
-    throw new Error("Unauthorized");
-  }
 
   const claimId = String(formData.get("claimId") || "");
   const status = String(formData.get("status") || "");
@@ -305,23 +323,17 @@ export async function updateClaimStatus(formData: FormData) {
     throw new Error("Invalid claim update");
   }
 
-  const { data: claim, error } = await supabase
-    .from("claims")
-    .update({
-      status,
-      admin_comments: adminComments || null,
-      reviewed_at: new Date().toISOString(),
-      reviewed_by: user.id,
-    })
-    .eq("id", claimId)
-    .select("claimant_id")
-    .single();
+  const { error } = await supabase.rpc("review_claim_as_admin", {
+    p_claim_id: claimId,
+    p_status: status,
+    p_comments: adminComments || null,
+  });
 
-  if (error || !claim) {
-    throw new Error("Failed to update claim");
+  if (error) {
+    throw new Error(error.message || "Failed to review claim");
   }
 
-  await ensureClaimStatusNotification(supabase, claimId, claim.claimant_id, status as "Approved" | "Rejected");
+  revalidatePath("/", "layout");
 }
 
 export async function updateClaimStatusByOwner(formData: FormData) {
@@ -394,7 +406,12 @@ export async function updateClaimStatusByOwner(formData: FormData) {
       );
     }
 
-    await ensureClaimStatusNotification(supabase, claimId, claim.claimant_id, status as "Approved" | "Rejected");
+    await ensureClaimStatusNotification(
+      supabase,
+      claimId,
+      claim.claimant_id,
+      status as "Approved" | "Rejected",
+    );
   }
 
   redirect("/posts/my-posts");
@@ -432,11 +449,17 @@ export async function getClaimForReview(id: string) {
 
   const { data: post, error: postError } = await supabase
     .from("posts")
-    .select("id, user_id, item_name, type, category, date, location, description, image_url")
+    .select(
+      "id, user_id, item_name, type, category, date, location, description, image_url",
+    )
     .eq("id", claim.post_id)
     .single();
 
-  if (postError || !post || (claim.claimant_id !== user.id && post.user_id !== user.id)) {
+  if (
+    postError ||
+    !post ||
+    (claim.claimant_id !== user.id && post.user_id !== user.id)
+  ) {
     throw new Error("Claim not found");
   }
 
@@ -504,7 +527,9 @@ export async function getUnreadNotificationCount() {
     .eq("type", "claim_status_changed")
     .is("read_at", null);
 
-  return error ? pendingClaims ?? 0 : (pendingClaims ?? 0) + (statusNotifications ?? 0);
+  return error
+    ? (pendingClaims ?? 0)
+    : (pendingClaims ?? 0) + (statusNotifications ?? 0);
 }
 
 export async function markNotificationsAsRead() {
@@ -576,12 +601,13 @@ export async function getNotificationFeed() {
     return [];
   }
 
-  const [pendingClaims, reviewedClaims, ownerReviewedClaims] = await Promise.all([
-    getPendingClaimNotifications(),
-    supabase
-      .from("claims")
-      .select(
-        `
+  const [pendingClaims, reviewedClaims, ownerReviewedClaims] =
+    await Promise.all([
+      getPendingClaimNotifications(),
+      supabase
+        .from("claims")
+        .select(
+          `
         id,
         post_id,
         status,
@@ -592,14 +618,14 @@ export async function getNotificationFeed() {
           item_name
         )
       `,
-      )
-      .eq("claimant_id", user.id)
-      .in("status", ["Approved", "Rejected"])
-      .order("created_at", { ascending: false }),
-    supabase
-      .from("claims")
-      .select(
-        `
+        )
+        .eq("claimant_id", user.id)
+        .in("status", ["Approved", "Rejected"])
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("claims")
+        .select(
+          `
         id,
         post_id,
         status,
@@ -611,11 +637,11 @@ export async function getNotificationFeed() {
           item_name
         )
       `,
-      )
-      .in("status", ["Approved", "Rejected"])
-      .eq("posts.user_id", user.id)
-      .order("reviewed_at", { ascending: false }),
-  ]);
+        )
+        .in("status", ["Approved", "Rejected"])
+        .eq("posts.user_id", user.id)
+        .order("reviewed_at", { ascending: false }),
+    ]);
 
   if (reviewedClaims.error) {
     throw new Error("Failed to fetch notification feed");
@@ -640,14 +666,14 @@ export async function getNotificationFeed() {
     const post = Array.isArray(claim.posts) ? claim.posts[0] : claim.posts;
 
     return {
-    id: `status-${claim.id}`,
-    kind: "claim_status" as const,
-    createdAt: claim.reviewed_at ?? claim.created_at,
-    message: `Your claim for ${post?.item_name ?? "this item"} was ${claim.status.toLowerCase()}.`,
-    detail: null,
-    href: `/claims/${claim.id}`,
-    linkLabel: "View claim",
-    read: false,
+      id: `status-${claim.id}`,
+      kind: "claim_status" as const,
+      createdAt: claim.reviewed_at ?? claim.created_at,
+      message: `Your claim for ${post?.item_name ?? "this item"} was ${claim.status.toLowerCase()}.`,
+      detail: null,
+      href: `/claims/${claim.id}`,
+      linkLabel: "View claim",
+      read: false,
     };
   });
 

@@ -10,25 +10,19 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import PostCard from "./post-card";
+import type { CategoryOption } from "@/lib/categories";
 
-const CATEGORIES = [
-  { label: "Select a category", value: null },
-  { label: "Laptop/Computer", value: "laptop/computer" },
-  { label: "Phone", value: "phone" },
-  { label: "Wallet/Cash", value: "wallet/cash" },
-  { label: "Backpack/Bag", value: "backpack/bag" },
-  { label: "Keys", value: "keys" },
-  { label: "Headphones/Earbuds", value: "headphones/earbuds" },
-  { label: "Watch", value: "watch" },
-  { label: "Water Bottle", value: "water-bottle" },
-  { label: "Clothing", value: "clothing" },
-  { label: "Documents/ID", value: "documents/id" },
-  { label: "Books/Notebooks", value: "books/notebooks" },
-  { label: "Jewellery", value: "jewellery" },
-  { label: "Other", value: "other" },
-];
-
-export default function PostFilter({ posts }: { posts: any[] }) {
+export default function PostFilter({
+  posts,
+  categories: categoryOptions,
+}: {
+  posts: any[];
+  categories: CategoryOption[];
+}) {
+  const categories = [
+    { label: "Select a category", value: null as string | null },
+    ...categoryOptions,
+  ];
   // Search state
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
@@ -201,7 +195,7 @@ export default function PostFilter({ posts }: { posts: any[] }) {
                       )
                     }
                   >
-                    {CATEGORIES.map((c) => (
+                    {categories.map((c) => (
                       <option key={String(c.value)} value={c.value ?? "null"}>
                         {c.label}
                       </option>
