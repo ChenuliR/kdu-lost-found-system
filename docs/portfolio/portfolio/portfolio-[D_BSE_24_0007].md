@@ -116,12 +116,12 @@ My contribution focused primarily on Scrum coordination support, project trackin
 The following repository resources provide evidence of my project-related contributions:
 
 - [Project Repository](https://github.com/ChenuliR/kdu-lost-found-system)
-- [README](README.md)
-- [Product Backlog](docs/product-backlog.md)
-- [Architecture Documentation](docs/architecture.md)
-- [Sprint Journals](docs/sprint-journals.md)
-- [Definition of Done](docs/definition-of-done.md)
-- [Architecture Diagrams](docs/diagrams/)
+- [README](https://github.com/ChenuliR/kdu-lost-found-system/blob/main/README.md)
+- [Product Backlog](https://github.com/ChenuliR/kdu-lost-found-system/blob/main/docs/product-backlog.md)
+- [Architecture Documentation](https://github.com/ChenuliR/kdu-lost-found-system/blob/main/docs/architecture.md)
+- [Sprint Journals](https://github.com/ChenuliR/kdu-lost-found-system/blob/main/docs/sprint-journals.md)
+- [Definition of Done](https://github.com/ChenuliR/kdu-lost-found-system/blob/main/docs/definition-of-done.md)
+- [Architecture Diagrams](https://github.com/ChenuliR/kdu-lost-found-system/tree/main/docs/diagrams)
 
 ## 9. Reflection
 
