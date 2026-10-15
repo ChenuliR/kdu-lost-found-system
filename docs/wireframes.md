@@ -35,36 +35,27 @@ Login
 Registration
 <img width="1440" height="1024" alt="Sign Up" src="https://github.com/user-attachments/assets/ec16cd3f-4e0d-4ff5-9ae8-3028ff8a803f" />
 
-
 Browse Listing
 <img width="1440" height="1024" alt="Home" src="https://github.com/user-attachments/assets/bce6065a-fc83-4e6c-bf03-df0c6dca0a0e" />
 
-
-
 Item Details
 <img width="1440" height="1411" alt="Product Details" src="https://github.com/user-attachments/assets/5658ae9b-5968-4b9e-ab9c-9a7d2269da1a" />
-
 
 New Post
 <img width="1440" height="1075" alt="Lost Post" src="https://github.com/user-attachments/assets/bd544e83-fc68-41a0-8a58-62ae697e5eee" />
 <img width="1440" height="1075" alt="Found Post" src="https://github.com/user-attachments/assets/a81df81f-cf4c-4efa-82f1-f2bb62c0de07" />
 
-
 My Posts
 <img width="1440" height="1024" alt="My Posts" src="https://github.com/user-attachments/assets/8aaba720-fa3b-443a-b33d-f41238946e58" />
-
 
 My Claims
 <img width="1440" height="1049" alt="My Claims" src="https://github.com/user-attachments/assets/47860d1c-e312-4ff2-9e58-27974ee0f6bb" />
 
-
 Admin Dashboard
 <img width="1440" height="1044" alt="Admin dashboard" src="https://github.com/user-attachments/assets/d366e226-47b3-46b2-94d3-e187049cdb9f" />
 
-
 Admin Review Claim
 <img width="1440" height="1398" alt="Admin review claim" src="https://github.com/user-attachments/assets/2a35397c-03fd-4b05-ab37-6b6dbb845bb5" />
-
 
 Categories
 <img width="1440" height="1044" alt="Categories" src="https://github.com/user-attachments/assets/f116e1f9-7f7d-4c15-9a8f-b43d2d2ff00e" />
@@ -109,31 +100,42 @@ https://www.figma.com/design/twmjJIY5tbbBWooZ7VtaoJ/Lost-Found-System?node-id=17
 
 
 Login
-<img width="1440" height="1024" alt="Login" src="https://github.com/user-attachments/assets/16d61446-0b65-424b-8c8d-2289e61789da" />
+<img width="1440" height="1024" alt="Login" src="https://github.com/user-attachments/assets/ca8c5ed5-7625-4bdd-945a-faa1c0dcf66a" />
+
+Registration
+<img width="1440" height="1024" alt="Sign Up" src="https://github.com/user-attachments/assets/c1e9874a-e560-4c61-8bde-5e7101a17cab" />
 
 Browse Listings
-<img width="1440" height="1142" alt="Browse Listing" src="https://github.com/user-attachments/assets/5c81311e-dc24-40e7-b84f-f95505afdbff" />
+<img width="1440" height="1024" alt="Home" src="https://github.com/user-attachments/assets/47ce22a0-9c63-4a3e-81aa-85eb6b8a7bdb" />
 
 Item Details
-<img width="1440" height="1462" alt="Item Details" src="https://github.com/user-attachments/assets/14076770-4f0d-415d-8064-b2b6cf6d3aa9" />
+<img width="1440" height="1411" alt="Product Details" src="https://github.com/user-attachments/assets/186b905e-0c35-48b5-ba9d-41ae0db344fb" />
 
 Create New Post
-<img width="1440" height="1130" alt="New Post" src="https://github.com/user-attachments/assets/ff4453eb-1cbe-4c52-baa6-48e08a25a8e4" />
+<img width="1440" height="1075" alt="Lost Post" src="https://github.com/user-attachments/assets/f0389652-6e31-4480-a807-17ebf8ad7ba4" />
+<img width="1440" height="1075" alt="Found Post" src="https://github.com/user-attachments/assets/a66bbb9d-dd11-4006-b248-9c41972c4286" />
 
 My Posts
-<img width="1440" height="1370" alt="My Posts" src="https://github.com/user-attachments/assets/577739b1-bf24-4964-8a0a-ac0489f4d887" />
+<img width="1440" height="1024" alt="My Posts" src="https://github.com/user-attachments/assets/d1053f38-90f1-4502-8df3-d2cf8134661c" />
 
 My Claims
-<img width="1440" height="1141" alt="My Claims" src="https://github.com/user-attachments/assets/ae6e21d0-95e3-4983-9049-69d4e88f74ec" />
-
-User Profile
-<img width="1440" height="1358" alt="User Profile" src="https://github.com/user-attachments/assets/a0b0668b-51c5-4afa-a1d7-381e2c956635" />
-
-Profile Navigation
-<img width="1440" height="1145" alt="Profile Navigation" src="https://github.com/user-attachments/assets/d7ea9802-655f-46d3-86ce-b5827e0cc56c" />
+<img width="1440" height="1049" alt="My Claims" src="https://github.com/user-attachments/assets/050150e3-51fd-4670-a434-868d47ed1c24" />
 
 Admin Dashboard
-<img width="1440" height="1141" alt="Admin Dashboard" src="https://github.com/user-attachments/assets/0ec6b011-92ea-4610-bb8f-503a72837aeb" />
+<img width="1440" height="1044" alt="Admin home-1" src="https://github.com/user-attachments/assets/c0685c91-108d-4a2c-894c-16da4ba2b272" />
+
+Admin Review Claim
+<img width="1440" height="1398" alt="Admin review claim" src="https://github.com/user-attachments/assets/193cdfe0-47a5-428f-bb0d-1f0ba4bb21d3" />
+
+Categories
+<img width="1440" height="1044" alt="Categories" src="https://github.com/user-attachments/assets/d1fa22c0-d3d1-4cfa-ba0e-e4354e1a16b6" />
+
+Notification
+<img width="1440" height="1049" alt="Notification" src="https://github.com/user-attachments/assets/c32b6a5c-4df2-4b4e-bf49-f3dbb3109264" />
+
+Report
+<img width="1440" height="1411" alt="Report" src="https://github.com/user-attachments/assets/4ff8b40b-dd9f-4852-8a94-8f6b500a1275" />
+
 
 <br>
 <br>
