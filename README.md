@@ -72,12 +72,13 @@ The Campus Lost & Found Portal addresses these challenges by providing a central
 
 | Technology | Purpose |
 |---|---|
-| TypeScript | Main application development language |
-| CSS | User interface styling |
-| JavaScript | Additional application functionality |
-| Supabase | Backend services and database integration |
-| Git | Version control |
-| GitHub | Source code hosting and collaboration |
+| Next.js 16 | Full-stack React web application framework |
+| React 19 | User interface development |
+| TypeScript | Application development language |
+| Tailwind CSS | User interface styling |
+| Supabase | Authentication, PostgreSQL database, and backend services |
+| ESLint | Code quality checks |
+| Git and GitHub | Version control and source code hosting |
 
 ## System Benefits
 
@@ -92,56 +93,118 @@ The Campus Lost & Found Portal addresses these challenges by providing a central
 
 ### Prerequisites
 
-Ensure that the following are available:
+Install or obtain access to the following:
 
-- [Node.js](https://nodejs.org/)
+- [Node.js](https://nodejs.org/) 20 or newer
 - npm
 - Git
-- Access to the project's Supabase configuration
+- A Supabase project
 
 ### Installation
 
-1. Clone the repository:
+Clone the repository and install its dependencies:
 
-   ```bash
-   git clone https://github.com/ChenuliR/kdu-lost-found-system.git
-   ```
+```bash
+git clone https://github.com/ChenuliR/kdu-lost-found-system.git
+cd kdu-lost-found-system
+npm install
+```
 
-2. Navigate to the project directory:
+### Environment Configuration
 
-   ```bash
-   cd kdu-lost-found-system
-   ```
+Create a `.env.local` file in the project root. Add the Supabase project URL and anonymous key:
 
-3. Install the dependencies:
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+```
 
-   ```bash
-   npm install
-   ```
+Do not commit `.env.local` or any service-role key to the repository. The anonymous key is intended for the browser; a Supabase service-role key must remain private and is not required by the application.
 
-4. Configure the required Supabase environment variables according to the project configuration.
+### Database Setup
 
-5. Start the development server using the command specified in `package.json`, commonly:
+1. Open the Supabase SQL Editor for the project.
+2. Run [`docs/initialschema.sql`](docs/initialschema.sql) for a new database.
+3. For an existing database that needs the claim-review functionality, run [`docs/claim-review-migration.sql`](docs/claim-review-migration.sql) after reviewing the migration.
+4. Confirm that Row Level Security is enabled for `posts`, `claims`, `comments`, and `notifications`.
 
-   ```bash
-   npm run dev
-   ```
+The schema creates the application tables, access policies, claim-review function, and notification rules.
 
-6. Open the local URL displayed in the terminal to access the application.
+### Run the Application
 
-## Project Structure
+Start the development server:
 
-The repository includes documentation relating to the system, such as:
+```bash
+npm run dev
+```
 
-- `README.md` — Project overview and setup instructions.
-- `docs/product-backlog.md` — Planned system features and user stories.
-- `docs/architecture.md` — System architecture documentation.
-- `docs/sprint-journals.md` — Development progress and sprint records.
-- `docs/definition-of-done.md` — Criteria used to determine when work is complete.
+Open the local URL shown in the terminal, normally `http://localhost:3000`.
+
+For a production-style local run:
+
+```bash
+npm run build
+npm run start
+```
+
+### Available Commands
+
+| Command | Purpose |
+|---|---|
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build |
+| `npm run start` | Start the production build |
+| `npm run lint` | Run ESLint checks |
+
+## Administrator Setup
+
+Administrator access is controlled through Supabase Auth `app_metadata`. The administrator user's role must be set to:
+
+```json
+{
+  "role": "admin"
+}
+```
+
+Set this value only through an approved server-side or Supabase administrative process. Do not store the role in ordinary user-editable metadata. After assigning the role, sign out and sign in again so the updated token is used.
+
+## Main User Workflows
+
+1. A student or staff member signs in and creates a lost or found post.
+2. Other authenticated users search listings and submit claims with proof details and contact information.
+3. The post owner or an administrator reviews each pending claim.
+4. An approved claim changes the post status to `Claimed`; competing pending claims are rejected.
+5. Claimants receive notifications when their claim status changes.
+
+## Documentation
+
+- [Client handover note](docs/client-handover-note.md) — Deployment, operations, ownership, security, and sign-off.
+- [Architecture documentation](docs/architecture.md) — System architecture, database design, and workflow links.
+- [Mermaid system and database diagrams](docs/diagrams/) — Complete visual documentation for the viva.
+- [Initial database schema](docs/initialschema.sql) — Tables, constraints, and Row Level Security policies.
+- [Claim review migration](docs/claim-review-migration.sql) — Claim-owner review and notification migration.
+- [User journey flows](docs/user-journey-flows.md) — Main user and administrator journeys.
+- [Product backlog](docs/product-backlog.md) — Features and user stories.
+- [Sprint journals](docs/sprint-journals.md) — Development progress and sprint records.
+- [Definition of done](docs/definition-of-done.md) — Completion criteria.
+
+## Troubleshooting
+
+### Missing Supabase environment variables
+
+Confirm that `.env.local` exists in the repository root and contains both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY`. Restart the development server after changing environment variables.
+
+### Administrator pages are unavailable
+
+Confirm that the signed-in user's Supabase Auth `app_metadata.role` is exactly `admin`, then sign out and sign in again.
+
+### Database or claim errors
+
+Confirm that the required SQL script has been run in the correct Supabase project and that Row Level Security policies are present. Check the Supabase project logs for the exact database error.
 
 ## Project Status
 
-The Campus Lost & Found Portal has completed its planned user stories, and the completed system has been presented to and accepted by the client.
+The Campus Lost & Found Portal has completed its planned user stories and includes the implementation, architecture diagrams, database scripts, setup guide, and client handover documentation required for delivery.
 
 ## Repository
 
