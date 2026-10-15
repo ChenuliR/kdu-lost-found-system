@@ -1,10 +1,10 @@
 # Definition of Done (DoD)
 
-## Lost & Found System
+## Campus Lost & Found Portal
 
 The Definition of Done (DoD) defines the criteria that must be satisfied before a User Story is considered completed and moved to **Done**.
 
-The following Definition of Done is based on the development and Scrum practices followed by the team up to Sprint 2.
+The team uses this checklist to maintain consistency across implementation, testing, documentation, and client acceptance throughout the development of the Campus Lost & Found Portal.
 
 ---
 
@@ -14,8 +14,9 @@ A User Story is considered Done when:
 
 - [ ] The User Story requirements have been implemented.
 - [ ] All defined acceptance criteria have been satisfied.
-- [ ] The implemented functionality works according to the expected user flow.
-- [ ] The functionality is consistent with the approved system requirements.
+- [ ] The functionality works according to the expected user flow.
+- [ ] The implementation is consistent with the approved system requirements.
+- [ ] The feature behaves correctly for its intended user role.
 
 ---
 
@@ -24,11 +25,13 @@ A User Story is considered Done when:
 The User Story must have:
 
 - [ ] Required frontend functionality implemented.
-- [ ] Required backend functionality implemented.
-- [ ] Required database integration completed.
+- [ ] Required backend functionality implemented where applicable.
+- [ ] Required database integration completed where applicable.
 - [ ] Appropriate form validation implemented.
 - [ ] Appropriate error handling implemented.
+- [ ] Authentication and authorization checks implemented where required.
 - [ ] No known critical errors affecting the functionality.
+- [ ] Integration with related system features completed where applicable.
 
 ---
 
@@ -36,11 +39,12 @@ The User Story must have:
 
 The implemented feature must:
 
-- [ ] Follow the approved Figma design.
-- [ ] Use consistent UI components.
-- [ ] Provide clear navigation.
-- [ ] Be responsive on supported screen sizes.
-- [ ] Include appropriate validation and error messages where required.
+- [ ] Follow the approved Figma design where applicable.
+- [ ] Use consistent UI components and styling.
+- [ ] Provide clear and understandable navigation.
+- [ ] Work on supported screen sizes.
+- [ ] Display appropriate validation messages and error feedback.
+- [ ] Provide clear status information for relevant operations.
 - [ ] Incorporate relevant client feedback.
 
 ---
@@ -51,63 +55,72 @@ Before a User Story is considered Done:
 
 - [ ] The functionality has been manually tested.
 - [ ] Valid inputs have been tested.
-- [ ] Invalid inputs and error scenarios have been tested.
+- [ ] Invalid inputs and relevant error scenarios have been tested.
 - [ ] Frontend and backend integration has been tested where applicable.
 - [ ] Database operations have been tested where applicable.
+- [ ] Authentication and authorization have been checked where applicable.
 - [ ] Existing functionality has been checked to ensure that new changes do not break it.
 - [ ] Identified blocking bugs have been fixed.
+- [ ] The feature behaves as expected during the relevant user workflow.
 
 ---
 
-## 5. Code & GitHub
+## 5. Code and GitHub
 
-- [ ] Code has been committed to the GitHub repository.
+- [ ] Code changes have been committed to the GitHub repository.
 - [ ] Changes have been pushed to the appropriate branch.
 - [ ] Code has been reviewed where applicable.
-- [ ] Merge conflicts have been resolved.
-- [ ] The related GitHub Issue has been updated.
+- [ ] Merge conflicts have been resolved where applicable.
+- [ ] Related GitHub Issues have been updated where applicable.
 - [ ] The GitHub Project Board status has been updated.
+- [ ] Completed work is identifiable in the repository history.
 
 ---
 
-## 6. Client/Product Owner Acceptance
+## 6. Client / Product Owner Acceptance
 
 Where applicable:
 
-- [ ] The completed functionality has been demonstrated to the Product Owner/Client.
-- [ ] Client feedback has been considered.
-- [ ] Required changes from client feedback have been implemented.
-- [ ] The Product Owner/Client has accepted the completed functionality.
+- [ ] The completed functionality has been demonstrated to the Product Owner or client.
+- [ ] Client feedback has been recorded and considered.
+- [ ] Required changes resulting from client feedback have been implemented.
+- [ ] The completed functionality has been reviewed against its requirements.
+- [ ] Client acceptance has been recorded where applicable.
 
 ---
 
 ## 7. Documentation
 
 - [ ] Relevant project documentation has been updated.
-- [ ] User Story status has been updated.
+- [ ] The User Story status has been updated.
 - [ ] Sprint documentation has been updated where required.
 - [ ] Relevant GitHub Issues and project records are up to date.
+- [ ] Architecture documentation has been updated where applicable.
+- [ ] Relevant diagrams and technical descriptions reflect the documented system design.
 
 ---
 
-## 8. Features Completed So Far
+## 8. System Features Covered by the Definition of Done
 
-The Definition of Done has been applied to the following completed features:
+The Definition of Done applies to the planned features of the Campus Lost & Found Portal.
 
-### Authentication
+### 8.1 Authentication
+
 - User Login
 - User Logout
 
-### Lost & Found Posts
+### 8.2 Lost and Found Post Management
+
 - Create Lost Item Post
 - Create Found Item Post
 - Upload Item Photo
-- View Item Details
 - Edit Own Post
 - Delete Own Post
 - Update Post Status
+- View Item Details
 
-### Search & Filtering
+### 8.3 Search and Filtering
+
 - Search Items
 - Search by Item Name
 - Search by Item Description
@@ -117,19 +130,38 @@ The Definition of Done has been applied to the following completed features:
 - Filter by Date
 - Filter by Location
 
-These features were completed as part of Sprint 1 and Sprint 2. The Sprint 2 deliverable provides the core flow:
+### 8.4 Claim Management
 
-**Login → Create Lost/Found Post → Upload Photo → Search → Filter → View → Edit/Delete**
+- Submit Claim Request
+- Track Claim Status
+- Receive Notifications
+- Review Claim Requests
+
+### 8.5 Administration
+
+- Moderate Posts
+- View Administrative Dashboard
+
+The applicable criteria in this document should be satisfied before each feature is marked as Done. Features should only be described as implemented when supported by the actual application.
 
 ---
 
 ## 9. Current GitHub Workflow
 
-The team uses the following workflow:
+The team uses the following workflow to track work:
 
 **Todo → In Progress → Review/QA → Done**
 
-A User Story should only be moved to **Done** after the applicable development, testing, review, acceptance, and documentation criteria have been completed.
+A User Story should only be moved to **Done** after its applicable development, testing, review, and documentation criteria have been satisfied.
+
+Client acceptance is recorded where required by the project's review process.
 
 ---
 
+## 10. Project Completion Status
+
+The Campus Lost & Found Portal has completed its **17 planned User Stories** across the development sprints. The completed system was presented to the client and accepted.
+
+The Definition of Done provides a consistent reference for assessing the completion of individual User Stories and maintaining the quality and traceability of the project deliverables.
+
+**Project status:** Planned User Stories completed; final system accepted by the client.
