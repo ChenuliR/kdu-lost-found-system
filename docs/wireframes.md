@@ -22,7 +22,7 @@ The wireframes were created to:
 
 ### Figma Design
 
-https://www.figma.com/design/twmjJIY5tbbBWooZ7VtaoJ/Lost-Found-System?node-id=0-1&t=UosgQAfaojkF6Wss-1
+https://www.figma.com/design/twmjJIY5tbbBWooZ7VtaoJ/Lost-Found-System?node-id=92-7997&t=vXCq9NlqbesxS7xf-1
 
 <br>
 
