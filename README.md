@@ -139,8 +139,6 @@ The repository includes documentation relating to the system, such as:
 - `docs/sprint-journals.md` — Development progress and sprint records.
 - `docs/definition-of-done.md` — Criteria used to determine when work is complete.
 
-*Note: The exact source-code directory structure and configuration names should be checked against the current repository.*
-
 ## Project Status
 
 The Campus Lost & Found Portal has completed its planned user stories, and the completed system has been presented to and accepted by the client.
