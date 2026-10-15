@@ -159,32 +159,39 @@ The dark mode design maintains the existing system structure and user flow while
 
 ## Dark Mode UI Design Screens
 
+Login
+<img width="1440" height="1024" alt="Login" src="https://github.com/user-attachments/assets/c5341010-6755-48a3-a5c3-17f7e4749cd0" />
+
+Registration
+<img width="1440" height="1024" alt="Sign Up" src="https://github.com/user-attachments/assets/398e98ff-fd5d-4415-9fce-9323a6f7f93c" />
+
 Browse Listings
-<img width="1440" height="1142" alt="Browse Listing" src="https://github.com/user-attachments/assets/b5bd041d-1180-4140-9de5-83b70361a72a" />
+<img width="1440" height="1024" alt="Home" src="https://github.com/user-attachments/assets/e3d33586-491c-4c27-855b-195ea0591a2e" />
 
 Item Details
-<img width="1440" height="1498" alt="Item Details" src="https://github.com/user-attachments/assets/7a5646a5-2652-4b82-99ca-84a43af81c63" />
+<img width="1440" height="1411" alt="Product Details" src="https://github.com/user-attachments/assets/3928d569-0aab-4c19-8b87-b7f115be2b17" />
 
-Create Lost Post
-<img width="1440" height="1247" alt="Lost Post" src="https://github.com/user-attachments/assets/5a22fee5-96df-4d12-bb1e-8be2c7c2bb8a" />
-
-Create Found Post
-<img width="1440" height="1531" alt="Found Post" src="https://github.com/user-attachments/assets/91afbc70-d8e9-440a-9f65-d24428264326" />
+Create New Post
+<img width="1440" height="1075" alt="Lost Post" src="https://github.com/user-attachments/assets/05816b80-3147-4789-bc20-912ce531b89c" />
+<img width="1440" height="1075" alt="Lost Post-1" src="https://github.com/user-attachments/assets/d41fd751-6fa9-4cff-ad4c-f7199df4e5a4" />
 
 My Posts
-<img width="1440" height="1370" alt="My Posts" src="https://github.com/user-attachments/assets/efad4e86-ce97-4677-9bd1-06039f3ea864" />
+<img width="1440" height="1024" alt="My Posts" src="https://github.com/user-attachments/assets/5b99e8a1-4b37-4aa2-927c-9324081975fd" />
 
 My Claims
-<img width="1440" height="1258" alt="My Claims" src="https://github.com/user-attachments/assets/e5fafd0b-a794-4023-820c-faa1a8f73a51" />
-
-User Profile
-<img width="1440" height="1377" alt="User Profile" src="https://github.com/user-attachments/assets/a9f1c614-00d3-4113-8306-d8fb00022cea" />
-
-Profile Navigation
-<img width="1440" height="1259" alt="Profile Navigation" src="https://github.com/user-attachments/assets/e82a18aa-a8c8-41f6-a225-008aac7d23c4" />
+<img width="1440" height="1049" alt="My Claims" src="https://github.com/user-attachments/assets/c59b4497-3a23-462e-9901-11ea404b8dac" />
 
 Admin Dashboard
-<img width="1440" height="1258" alt="Admin Dashboard" src="https://github.com/user-attachments/assets/f15a0904-8fe3-4bc1-a95d-3c2e8e167eb5" />
+<img width="1440" height="1044" alt="Admin home" src="https://github.com/user-attachments/assets/ffd9a4a8-37cd-45ec-8f52-7983680acef0" />
+
+Admin Review Claim
+<img width="1440" height="1398" alt="Admin review claim" src="https://github.com/user-attachments/assets/892ebc67-ac60-4303-b063-6421994bcfda" />
+
+Categories
+<img width="1440" height="1044" alt="Categories" src="https://github.com/user-attachments/assets/f8f0fad0-d363-4fe3-9e50-86f5273235b8" />
+
+Notification
+<img width="1440" height="1049" alt="Notification" src="https://github.com/user-attachments/assets/a0f32c94-38de-41f2-87e9-5f5877cda9d5" />
 
 
 
