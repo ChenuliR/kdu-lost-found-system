@@ -20,7 +20,7 @@ export default async function Navbar() {
       >
         <Bell />
         {unreadCount > 0 ? (
-          <span className="absolute -right-1 -top-1 flex min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] text-destructive-foreground">
+          <span className="absolute -right-1 -top-1 flex min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] text-white">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         ) : null}
