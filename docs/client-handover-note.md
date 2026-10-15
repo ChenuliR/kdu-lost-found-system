@@ -181,5 +181,5 @@ By signing below, the client confirms that the production access, operational re
 
 | Role | Name | Signature | Date |
 |---|---|---|---|
-| Client representative |  |  |  |
+| Client representative | H.A.J.R Wijesinghe | <img src="signature-jaliya.jpeg" width="120"> | 2026-10-15 |
 | Development representative |  |  |  |
