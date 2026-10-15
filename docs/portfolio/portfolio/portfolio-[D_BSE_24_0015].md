@@ -122,13 +122,45 @@ These contributions supported a more consistent user experience and provided cle
 
 ## 8. Evidence of Contributions
 
-The following repository resources provide evidence of my project-related contributions:
+This section provides evidence of my individual contributions to the Campus Lost & Found Portal project. The evidence includes UI/UX design documentation, user journey flowcharts, frontend development commits and Git history.
 
-- [Project Repository](https://github.com/ChenuliR/kdu-lost-found-system)
-- [Figma Design - README](https://github.com/ChenuliR/kdu-lost-found-system/blob/main/docs/wireframes.md)
-- [User Journey Flows](docs/user-journey-flows.md)
-- [Admin Dashboard](https://github.com/ChenuliR/kdu-lost-found-system/commit/3afaa723afbd02d9eeb493040328541c5a2bad28)
-- [Figma Design](https://www.figma.com/design/twmjJIY5tbbBWooZ7VtaoJ/Lost-Found-System?node-id=92-7997&t=vXCq9NlqbesxS7xf-1)
+### 8.1 UI/UX Design Evidence
+
+| Evidence ID | Description | Evidence Link |
+|---|---|---|
+| E1 | Initial Figma wireframes | [View Commit](https://github.com/ChenuliR/kdu-lost-found-system/commit/0629d3631cfef5d92190c659049995aeaee0cf03) |
+| E2 | Complete UI/UX design documentation | [View Commit](https://github.com/ChenuliR/kdu-lost-found-system/commit/09063cf5a05e24202a1821f2ec4441a41248898d) |
+| E3 | Dark-mode UI design | [View Commit](https://github.com/ChenuliR/kdu-lost-found-system/commit/5e975e2ed50d4d6f9c250534b29a55a4f85990c8) |
+
+- [Figma Prototype](https://www.figma.com/design/twmjJIY5tbbBWooZ7VtaoJ/Lost-Found-System?node-id=60-2&t=pOzXcfxixp0Ol7dO-1)
+
+
+### 8.2 User Journey Flowcharts
+
+The following Git commits provide evidence of the user journey flowcharts created and documented for the system.
+
+| Evidence ID | Description | Evidence Link |
+|---|---|---|
+| E4 | Initial login user journey flow | [View Commit](https://github.com/ChenuliR/kdu-lost-found-system/commit/147b08f890b48637950f8bf5718b396d07372f3d) |
+| E5 | Login and registration flow | [View Commit](https://github.com/ChenuliR/kdu-lost-found-system/commit/826cfb91ae5972abff99eb863ecc736d05e7a4c5) |
+| E6 | Post interaction flow | [View Commit](https://github.com/ChenuliR/kdu-lost-found-system/commit/bdd6fd8c686dad3ec0acc3914e0a97cb92cdf21c) |
+| E7 | Post management flow | [View Commit](https://github.com/ChenuliR/kdu-lost-found-system/commit/5dca2d62f49b53ce56bdc0f479d2791d0b21b54c) |
+| E8 | Student/Staff profile flowchart | [View Commit](https://github.com/ChenuliR/kdu-lost-found-system/commit/8e8720ab9de3b0b51ebed2771f41307dce3cc9f5) |
+| E9 | Admin profile flowchart | [View Commit](https://github.com/ChenuliR/kdu-lost-found-system/commit/21880b6cebf76b65706e29e5585b34227d3e6a77) |
+| E10 | Claim an item flow | [View Commit](https://github.com/ChenuliR/kdu-lost-found-system/commit/3d7ef665a1dcaa0856ac186974b31f93a06fbad8) |
+| E11 | Logout user journey flow | [View Commit](https://github.com/ChenuliR/kdu-lost-found-system/commit/ab4c39aea74995e6040869d4ef17a56aadcc8686) |
+
+### 8.3 Frontend Development Evidence
+
+| Evidence ID | Description | Evidence Link |
+|---|---|---|
+| E12 | Admin dashboard frontend implementation | [View Commit](https://github.com/ChenuliR/kdu-lost-found-system/commit/65f4b739f546e41f33400b1b45100e19b40c9f8d) |
+
+### 8.4 Project Documentation and Git History
+
+- **Wireframe and UI/UX Documentation:** [View Wireframes README](https://github.com/ChenuliR/kdu-lost-found-system/blob/main/docs/wireframes.md)
+- **Project Repository:** [View GitHub Repository](https://github.com/ChenuliR/kdu-lost-found-system)
+- **Git Commit History:** [View All  My Commits](https://github.com/ChenuliR/kdu-lost-found-system/commits/main/?author=Oshani24)
 
 
 ## 9. Reflection
