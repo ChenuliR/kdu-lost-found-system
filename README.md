@@ -6,6 +6,8 @@ The **Campus Lost & Found Portal** is a web-based application designed to help u
 
 It also includes administrative features that allow authorized administrators to review claims, moderate item listings, and monitor system activities through a dashboard.
 
+**Live application:** [kdu-lost-found-system.vercel.app](https://kdu-lost-found-system.vercel.app)
+
 ## Problem Statement
 
 Lost belongings are often difficult to recover when information is shared through informal methods such as notice boards, group chats, or word of mouth. These methods can make it difficult to find relevant information, verify ownership, and track recovery requests.
