@@ -122,6 +122,7 @@ The following repository resources provide evidence of my project-related contri
 - [Sprint Journals](https://github.com/ChenuliR/kdu-lost-found-system/blob/main/docs/sprint-journals.md)
 - [Definition of Done](https://github.com/ChenuliR/kdu-lost-found-system/blob/main/docs/definition-of-done.md)
 - [Architecture Diagrams](https://github.com/ChenuliR/kdu-lost-found-system/tree/main/docs/diagrams)
+- [Git Commit History – View All My Commits](https://github.com/ChenuliR/kdu-lost-found-system/commits/main/?author=ChenuliR) 
 
 ## 9. Reflection
 
